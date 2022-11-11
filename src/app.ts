@@ -3,6 +3,9 @@ import express, { json } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import Connection from './database/connection ';
+import { Rol } from './models/rol.model';
+import { User } from './models/user.model';
+import { Bill } from './models/bill.model';
 
 class App {
 
@@ -30,12 +33,14 @@ class App {
 
         this.connection = new Connection();
 
-        // await User.sync({ force: false });
+        await Rol.sync({ force: false });
+        await User.sync({ force: false });
+        await Bill.sync({ force: false });
 
         await this.connection.connection.sync({ force: false })
             .then(() => {
 
-                console.log(`Connection has been established successfully.`)
+                console.log(`Connection has been established successfully.`);
 
             })
             .catch((error) => {
