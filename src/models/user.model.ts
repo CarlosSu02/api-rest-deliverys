@@ -2,9 +2,8 @@
 // User model
 
 import * as Sequelize from "sequelize-typescript"
-import Connection from "../database/connection "
+import Connection from "../database/connection"
 import { Bill } from "./bill.model";
-import { Rol } from "./rol.model";
 
 const connection = new Connection();
 

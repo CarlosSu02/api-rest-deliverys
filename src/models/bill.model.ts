@@ -2,8 +2,8 @@
 // Bill model
 
 import * as Sequelize from "sequelize-typescript"
-import Connection from "../database/connection "
-import { User } from "./user.model";
+import Connection from "../database/connection"
+import { BillDetail } from "./bill.detail.model";
 
 const connection = new Connection();
 
@@ -12,7 +12,7 @@ export interface BillAddModel {
     detailBillId: number,
     date: string,
     userId: number,
-    IVA: number,
+    tax: number,
     discount: number,
     paymentForm: string,
     isPurchase: boolean
@@ -23,7 +23,7 @@ export interface BillModel extends Sequelize.Model<BillModel, BillAddModel> {
     detailBillId: number,
     date: string,
     userId: number,
-    IVA: number,
+    tax: number,
     discount: number,
     paymentForm: string,
     isPurchase: boolean
@@ -41,7 +41,7 @@ export const Bill = connection.connection.define(
             type: Sequelize.DataType.DATE,
             allowNull: false
         },
-        IVA: {
+        tax: {
             type: Sequelize.DataType.INTEGER,
             allowNull: false
         },
@@ -62,3 +62,14 @@ export const Bill = connection.connection.define(
         timestamps: false
     }
 );
+
+Bill.hasMany(BillDetail, {
+    foreignKey: 'billId',
+    sourceKey: 'id'
+});
+
+BillDetail.belongsTo(Bill, {
+    foreignKey: 'billId',
+    targetKey: 'id'
+});
+

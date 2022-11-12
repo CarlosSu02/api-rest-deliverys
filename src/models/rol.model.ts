@@ -2,7 +2,7 @@
 // Rol model
 
 import * as Sequelize from "sequelize-typescript"
-import Connection from "../database/connection "
+import Connection from "../database/connection"
 import { User } from "./user.model";
 
 const connection = new Connection();

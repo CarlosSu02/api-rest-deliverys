@@ -2,10 +2,12 @@
 import express, { json } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
-import Connection from './database/connection ';
+import Connection from './database/connection';
 import { Rol } from './models/rol.model';
 import { User } from './models/user.model';
 import { Bill } from './models/bill.model';
+import { BillDetail } from './models/bill.detail.model';
+import { Product } from './models/product.model';
 
 class App {
 
@@ -36,6 +38,8 @@ class App {
         await Rol.sync({ force: false });
         await User.sync({ force: false });
         await Bill.sync({ force: false });
+        await Product.sync({ force: false });
+        await BillDetail.sync({ force: false });
 
         await this.connection.connection.sync({ force: false })
             .then(() => {
