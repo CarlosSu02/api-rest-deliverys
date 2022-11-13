@@ -46,14 +46,3 @@ Product.belongsTo(Category, {
     foreignKey: 'categoryId',
     targetKey: 'id'
 });
-
-//Category.hasMany(Products, {
-//    foreignKey: 'rolId',
-//    sourceKey: 'id'
-//});
-//
-//Products.belongsTo(Category, {
-//    foreignKey: 'rolId',
-//    targetKey: 'id'
-//});
-//
