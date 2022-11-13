@@ -1,7 +1,7 @@
 import * as Sequelize from "sequelize-typescript";
 import Connection from "../database/connection";
 import { BillDetail } from "./bill.detail.model";
-
+import { Recipe } from "./recipe.model";
 const connection = new Connection();
 
 export interface ProductAddModel {
@@ -10,7 +10,7 @@ export interface ProductAddModel {
     price: number,
     priceNotTax: number,
     totalPrice: number,
-    type: string,
+    categoryId: number,
     isElaborated: boolean,
     stock: number,
     size: string
@@ -22,7 +22,7 @@ export interface ProductModel extends Sequelize.Model<ProductModel, ProductAddMo
     price: number,
     priceNotTax: number,
     totalPrice: number,
-    type: string,
+    categoryId: number,
     isElaborated: boolean,
     stock: number,
     size: string
@@ -52,10 +52,7 @@ export const Product = connection.connection.define(
             type: Sequelize.DataType.INTEGER,
             allowNull: false
         },
-        type: {
-            type: Sequelize.DataType.STRING(30),
-            allowNull: false
-        },
+       
         isElaborate: {
             type: Sequelize.DataType.BOOLEAN,
             allowNull: false
@@ -83,3 +80,13 @@ BillDetail.belongsTo(Product, {
     foreignKey: 'productId',
     targetKey: 'id'
 }); 
+
+Product.hasMany(Recipe, {
+    foreignKey: 'productId',
+     sourceKey: 'id'
+ });
+ 
+ Recipe.belongsTo(Product, {
+     foreignKey: 'productId',
+     targetKey: 'id'
+ });

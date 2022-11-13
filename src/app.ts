@@ -8,6 +8,9 @@ import { User } from './models/user.model';
 import { Bill } from './models/bill.model';
 import { BillDetail } from './models/bill.detail.model';
 import { Product } from './models/product.model';
+import { Recipe } from './models/recipe.model';
+import { Ingredient } from './models/ingredient.model';
+import { Category } from './models/category.model';
 
 class App {
 
@@ -38,8 +41,13 @@ class App {
         await Rol.sync({ force: false });
         await User.sync({ force: false });
         await Bill.sync({ force: false });
+        await Category.sync({ force: false });
         await Product.sync({ force: false });
+        await Ingredient.sync({ force: false });
+        await Recipe.sync({ force: false });
         await BillDetail.sync({ force: false });
+
+
 
         await this.connection.connection.sync({ force: false })
             .then(() => {
