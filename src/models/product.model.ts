@@ -2,6 +2,7 @@ import * as Sequelize from "sequelize-typescript";
 import Connection from "../database/connection";
 import { BillDetail } from "./bill.detail.model";
 import { Recipe } from "./recipe.model";
+
 const connection = new Connection();
 
 export interface ProductAddModel {

@@ -1,9 +1,8 @@
 
-// Rubro model
+// Category (Rubro) model
 
 import * as Sequelize from "sequelize-typescript"
 import Connection from "../database/connection"
-
 import { Product } from "./product.model";
 
 
@@ -46,14 +45,3 @@ Product.belongsTo(Category, {
     foreignKey: 'categoryId',
     targetKey: 'id'
 });
-
-//Category.hasMany(Products, {
-//    foreignKey: 'rolId',
-//    sourceKey: 'id'
-//});
-//
-//Products.belongsTo(Category, {
-//    foreignKey: 'rolId',
-//    targetKey: 'id'
-//});
-//

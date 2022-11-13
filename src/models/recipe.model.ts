@@ -4,8 +4,6 @@
 import * as Sequelize from "sequelize-typescript"
 import Connection from "../database/connection"
 
-
-
 const connection = new Connection();
 
 export interface RecipeAddModel {
