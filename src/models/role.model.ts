@@ -7,17 +7,17 @@ import { User } from "./user.model";
 
 const connection = new Connection();
 
-export interface RolAddModel {
+export interface RoleAddModel {
     id: number,
     type: string
 }
 
-export interface RolModel extends Sequelize.Model<RolModel, RolAddModel> {
+export interface RoleModel extends Sequelize.Model<RoleModel, RoleAddModel> {
     id: number,
     type: string
 }
 
-export const Rol = connection.connection.define(
+export const Role = connection.connection.define(
     'roles', 
     {
         id: {
@@ -35,12 +35,12 @@ export const Rol = connection.connection.define(
     }
 );
 
-Rol.hasMany(User, {
-    foreignKey: 'rolId',
+Role.hasMany(User, {
+    foreignKey: 'roleId',
     sourceKey: 'id'
 });
 
-User.belongsTo(Rol, {
-    foreignKey: 'rolId',
+User.belongsTo(Role, {
+    foreignKey: 'roleId',
     targetKey: 'id'
 });

@@ -3,7 +3,7 @@ import express, { json } from 'express';
 import cors from 'cors';
 import authRoutes from './routes/auth.routes';
 import Connection from './database/connection';
-import { Rol } from './models/rol.model';
+import { Role } from './models/role.model';
 import { User } from './models/user.model';
 import { Bill } from './models/bill.model';
 import { BillDetail } from './models/bill.detail.model';
@@ -38,7 +38,7 @@ class App {
 
         this.connection = new Connection();
 
-        await Rol.sync({ force: false });
+        await Role.sync({ force: false });
         await User.sync({ force: false });
         await Bill.sync({ force: false });
         await Category.sync({ force: false });
