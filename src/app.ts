@@ -11,6 +11,8 @@ import { Product } from './models/product.model';
 import { Recipe } from './models/recipe.model';
 import { Ingredient } from './models/ingredient.model';
 import { Category } from './models/category.model';
+import rolesRoutes from './routes/roles.routes';
+import rolController from './controllers/role.controller';
 
 class App {
 
@@ -38,21 +40,21 @@ class App {
 
         this.connection = new Connection();
 
-        await Role.sync({ force: false });
-        await User.sync({ force: false });
-        await Bill.sync({ force: false });
-        await Category.sync({ force: false });
-        await Product.sync({ force: false });
-        await Ingredient.sync({ force: false });
-        await Recipe.sync({ force: false });
-        await BillDetail.sync({ force: false });
-
-
-
         await this.connection.connection.sync({ force: false })
             .then(() => {
+                
+                // // modelos
+                // Role.sync();
+                // User.sync();
+                // Bill.sync();
+                // Category.sync();
+                // Product.sync();
+                // Ingredient.sync();
+                // Recipe.sync();
+                // BillDetail.sync();
 
                 console.log(`Connection has been established successfully.`);
+                rolController.insertRoles();
 
             })
             .catch((error) => {
@@ -61,10 +63,20 @@ class App {
 
             });
 
+        // modelos
+        await User.sync({ force: false });
+        await Bill.sync({ force: false });
+        await Category.sync({ force: false });
+        await Product.sync({ force: false });
+        await Ingredient.sync({ force: false });
+        await Recipe.sync({ force: false });
+        await BillDetail.sync({ force: false });
+            
     };
 
     routes = () => {
 
+        this.express.use('/api', rolesRoutes.router);
         this.express.use('/api', authRoutes.router);
 
     };
