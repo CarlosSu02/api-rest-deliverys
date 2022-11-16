@@ -1,4 +1,7 @@
+
+// Roles service
 import { Role } from "../models/role.model";
+import { User } from "../models/user.model";
 
 interface IRoles {
     count: number,
@@ -27,6 +30,14 @@ class RolesServices {
         if (role === null) throw new Error(JSON.stringify({ message: 'Role is not exists!' }));
 
         return role;
+
+    };
+
+    public getRolByEmail = async (email: string) => {
+
+        const role = await User.findOne({ where: { email: email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+
+        return role.role.type;
 
     };
 

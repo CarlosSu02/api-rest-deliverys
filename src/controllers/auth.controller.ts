@@ -10,6 +10,8 @@ import { SigninUserDto } from "../dtos/signin_user.dto";
 import { Role } from "../models/role.model";
 import authUtils, { IPayload } from "../utils/auth.utils";
 import { ChangePasswordDto } from "../dtos/change_password.dto";
+import rolesService from "../services/roles.service";
+import userService from "../services/users.service";
 
 class AuthController {
 
@@ -37,10 +39,11 @@ class AuthController {
                 ...validatedUser
             });
 
-            const searchUser = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+            // const searchUser = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+            const role = await rolesService.getRolByEmail(validatedUser.email);
 
             // Token
-            const token = jwt.sign({ email: validatedUser.email, role: searchUser.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day' });
+            const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
 
             res.status(201).header('Cache-Control', `auth-token: ${token}`).send(newUser);
 
@@ -61,7 +64,8 @@ class AuthController {
             
             const signinUserDto = plainToClass(SigninUserDto, payload);
             const validatedUser = await authService.validationSigninUser(signinUserDto);
-            const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+            // const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+            const user = await userService.searchUserInclude(validatedUser.email, Role).then(info => info?.toJSON());
 
             const signinUser = {
                 id: user.id,
@@ -91,7 +95,8 @@ class AuthController {
             
             const changePasswordDto = plainToClass(ChangePasswordDto, payload);
             const validatedUser = await authService.changePassword(changePasswordDto);
-            const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] });
+            // const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] });
+            const user = await userService.searchUserInclude(validatedUser.email, Role);
 
             user?.set({
                 password: validatedUser.new_password
@@ -128,7 +133,7 @@ class AuthController {
 
             const validatedToken = authUtils.verifyTokenPayload(token); 
 
-            if (!(await authService.searchUserByEmail(validatedToken.email!))) throw new Error(JSON.stringify({ message: 'User not found!' }));
+            if (!(await userService.searchUserByEmail(validatedToken.email!))) throw new Error(JSON.stringify({ message: 'User not found!' }));
 
             // res.status(200).send(payload);
             this.token = validatedToken;

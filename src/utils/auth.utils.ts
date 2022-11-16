@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import authService from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import usersService from '../services/users.service';
 
 export interface IPayload {
     email: string,
@@ -23,7 +24,7 @@ class AuthUtils {
 
     public validatePassword = async (email: string, password: string) => {
 
-        const user = await authService.searchUserByEmail(email).then(info => info?.toJSON());
+        const user = await usersService.searchUserByEmail(email).then(info => info?.toJSON());
 
         if (!user) throw new Error(JSON.stringify({ message: 'User not exists!' }));
 

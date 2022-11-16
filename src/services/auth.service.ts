@@ -1,24 +1,14 @@
 
-// service
+// Auth service
 import { SignupUserDto } from "../dtos/signup_user.dto";
-import { User } from "../models/user.model";
-import { validate } from 'class-validator';
 import authUtils from "../utils/auth.utils";
-import rolController from "../controllers/role.controller";
 import { SigninUserDto } from "../dtos/signin_user.dto";
 import { ChangePasswordDto } from "../dtos/change_password.dto";
 import rolesService from "./roles.service";
 import generalUtils from "../utils/general.utils";
+import userService from "./users.service";
 
 class AuthService {
-
-    public searchUserByEmail = async (email: string) => {
-
-        const existsUser = await User.findOne({ where: { email } }); 
-
-        return existsUser;
-
-    };
 
     public validationSignupUser = async (user: SignupUserDto): Promise<SignupUserDto> => {
 
@@ -26,7 +16,7 @@ class AuthService {
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if ((await this.searchUserByEmail(user.email!))) throw new Error(JSON.stringify({ message: 'User already exists!' }));
+        if ((await userService.searchUserByEmail(user.email!))) throw new Error(JSON.stringify({ message: 'User already exists!' }));
         
         await rolesService.getRolById(user.roleId!);
         user.password = await authUtils.encryptPassword(user.password!);
@@ -43,7 +33,7 @@ class AuthService {
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if (!(await this.searchUserByEmail(email))) throw new Error(JSON.stringify({ message: 'User not exists!' }));
+        if (!(await userService.searchUserByEmail(email))) throw new Error(JSON.stringify({ message: 'User not exists!' }));
         if (!(await authUtils.validatePassword(email, password))) throw new Error(JSON.stringify({ message: 'Password is not valid!' }));
 
         user.password = await authUtils.encryptPassword(password);
@@ -62,7 +52,7 @@ class AuthService {
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if (!(await this.searchUserByEmail(email!))) throw new Error(JSON.stringify({ message: 'User not exists!' }));
+        if (!(await userService.searchUserByEmail(email!))) throw new Error(JSON.stringify({ message: 'User not exists!' }));
         if (!(await authUtils.validatePassword(email!, password!))) throw new Error(JSON.stringify({ message: 'Password is not valid!' }));
 
         user.password = await authUtils.encryptPassword(password);

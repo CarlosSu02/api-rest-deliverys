@@ -13,6 +13,7 @@ import { Ingredient } from './models/ingredient.model';
 import { Category } from './models/category.model';
 import rolesRoutes from './routes/roles.routes';
 import rolController from './controllers/role.controller';
+import usersRoutes from './routes/users.routes';
 
 class App {
 
@@ -68,7 +69,8 @@ class App {
     routes = () => {
 
         this.express.use('/api', rolesRoutes.router);
-        this.express.use('/api', authRoutes.router);
+        this.express.use('/api/auth', authRoutes.router);
+        this.express.use('/api/user', usersRoutes.router);
 
     };
 
