@@ -177,7 +177,7 @@ class AuthController {
 
             const validatedToken = authUtils.verifyTokenPayload(token); 
 
-            if (!(await userService.searchUserByEmail(validatedToken!.email!))) throw new Error(JSON.stringify({ code: 401, message: 'User not found!' }));
+            if (!(await userService.searchUserByEmail(validatedToken!.email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not found!' }));
 
             // res.status(200).send(payload);
             this.token = validatedToken!;

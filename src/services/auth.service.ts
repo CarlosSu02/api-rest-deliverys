@@ -12,6 +12,8 @@ class AuthService {
 
     public validationSignupUser = async (user: SignupUserDto): Promise<SignupUserDto> => {
 
+        user.email = (user.email).toLowerCase();
+
         const errors = await generalUtils.errorsFromValidate(user);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
@@ -19,6 +21,7 @@ class AuthService {
         if ((await userService.searchUserByEmail(user.email!))) throw new Error(JSON.stringify({ code: 400, message: 'User already exists!' }));
         
         await rolesService.getRoleById(user.roleId!);
+        
         user.password = await authUtils.encryptPassword(user.password!);
 
         return user;
@@ -26,7 +29,9 @@ class AuthService {
     };
 
     public validationSigninUser = async (user: SigninUserDto): Promise<SigninUserDto> => {
-        
+
+        user.email = (user.email).toLowerCase();
+
         const { email, password } = user;
 
         const errors = await generalUtils.errorsFromValidate(user);
@@ -43,6 +48,8 @@ class AuthService {
     };
 
     public changePassword = async (user: ChangePasswordDto): Promise<ChangePasswordDto> => {
+
+        user.email = (user.email).toLowerCase();
 
         const { email, password, new_password } = user;
 

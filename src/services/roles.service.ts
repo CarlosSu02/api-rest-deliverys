@@ -58,11 +58,13 @@ class RolesServices {
 
     public validationAddRole = async (role: CreateRoleDto): Promise<CreateRoleDto> => {
 
+        role.type = (role.type).toLowerCase().trim();
+
         const errors = await generalUtils.errorsFromValidate(role);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        await this.getRoleByName((role.type).toLowerCase().trim());
+        await this.getRoleByName(role.type);
 
         return role;
 
