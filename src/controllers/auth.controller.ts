@@ -8,10 +8,11 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { SigninUserDto } from "../dtos/signin_user.dto";
 import { Role } from "../models/role.model";
-import authUtils, { IPayload } from "../utils/auth.utils";
+import authUtils, { IPayload } from "../common/utils/auth.utils";
 import { ChangePasswordDto } from "../dtos/change_password.dto";
 import rolesService from "../services/roles.service";
 import userService from "../services/users.service";
+import { ResponseDto } from "../common/dto/response.dto";
 
 class AuthController {
 
@@ -19,9 +20,12 @@ class AuthController {
 
     public ping = (req: Request, res: Response) => {
 
-        res.status(200).json({
+        const response: ResponseDto = {
+            code: 200,
             message: 'Hello strange!'
-        })
+        }
+
+        res.status(response.code!).send(response)
 
     };
 
@@ -40,17 +44,30 @@ class AuthController {
             });
 
             // const searchUser = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
-            const role = await rolesService.getRolByEmail(validatedUser.email);
+            const role = await rolesService.getRoleByEmail(validatedUser.email);
 
             // Token
             const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
 
-            res.status(201).header('Cache-Control', `auth-token: ${token}`).send(newUser);
+            const response: ResponseDto = {
+                code: 201,
+                message: 'New user created successfully.',
+                results: newUser
+            };
+
+            res.status(response.code!).header('Cache-Control', `auth-token: ${token}`).send(response);
 
         } catch (error) {
 
-            (error instanceof Error) ? res.status(400).send(error.message) : res.status(400).send(String(error));
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
             
+            }
+            
+            return res.status(500).send(String(error));
+                        
         }
 
     };
@@ -73,15 +90,29 @@ class AuthController {
                 role: user.role.type
             };
 
+            const response: ResponseDto = {
+                code: 200,
+                message: 'Successful login.',
+                results: signinUser
+            };
+
+
             // Token
             const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
 
-            res.status(200).header('Cache-Control', `auth-token: ${token}`).send(signinUser);
+            res.status(response.code!).header('Cache-Control', `auth-token: ${token}`).send(response);
 
         } catch (error) {
 
-            (error instanceof Error) ? res.status(400).send(error.message) : res.status(400).send(String(error));
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
             
+            }
+            
+            return res.status(500).send(String(error));
+
         }
 
     };
@@ -110,12 +141,25 @@ class AuthController {
                 role: user?.dataValues.role.type
             };
 
-            res.status(200).send(changedPassword);
+            const response: ResponseDto = {
+                code: 200,
+                message: 'Password has been changed successfully.',
+                results: changedPassword
+            }
+
+            res.status(response.code!).send(response);
 
         } catch (error) {
 
-            (error instanceof Error) ? res.status(400).send(error.message) : res.status(400).send(String(error));
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
             
+            }
+            
+            return res.status(500).send(String(error));
+                              
         }
 
     };    
@@ -127,23 +171,30 @@ class AuthController {
 
             const token = req.header('auth-token');
         
-            if(!token) throw new Error(JSON.stringify({ message: 'Access denied!' }));
+            if(!token) throw new Error(JSON.stringify({ code: 401, message: 'Access denied!' }));
         
-            if(!token.match(/^[\w]+\.(\w+\.)+[\w\-]+$/)) throw new Error(JSON.stringify({ message: 'Token invalid!' }));
+            if(!token.match(/^[\w]+\.(\w+\.)+[\w\-]+$/)) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid!' }));
 
             const validatedToken = authUtils.verifyTokenPayload(token); 
 
-            if (!(await userService.searchUserByEmail(validatedToken.email!))) throw new Error(JSON.stringify({ message: 'User not found!' }));
+            if (!(await userService.searchUserByEmail(validatedToken!.email!))) throw new Error(JSON.stringify({ code: 401, message: 'User not found!' }));
 
             // res.status(200).send(payload);
-            this.token = validatedToken;
+            this.token = validatedToken!;
 
             next();
            
         } catch (error) {
 
-            (error instanceof Error) ? res.status(401).send(error.message) : res.status(401).send(String(error));
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
             
+            }
+            
+            return res.status(500).send(String(error));
+                                    
         }
         
     };

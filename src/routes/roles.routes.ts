@@ -16,6 +16,9 @@ class RolesRoutes {
     initRoutes = () => {
 
         this.router.get('/roles', authController.verifyToken, roleController.getRoles);
+        
+        // De momento sin verificar token.
+        this.router.post('/roles', roleController.createRole);
 
     };
 

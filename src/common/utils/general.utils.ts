@@ -9,14 +9,17 @@ class GeneralUtils {
 
             if (errors.length > 0) {
 
-                let constraints: any = [];
+                let constraints: any = {
+                    code: 400,
+                    results: []
+                };
 
                 errors.forEach(err => {
                     
-                    constraints.push({
+                    constraints.results.push({
 
-                        'Property': err.property,
-                        'Errors': err.constraints
+                        'property': err.property,
+                        'errors': err.constraints
 
                     });
 

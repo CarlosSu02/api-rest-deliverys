@@ -1,9 +1,8 @@
 
 import bcrypt from 'bcrypt';
-import authService from '../services/auth.service';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import usersService from '../services/users.service';
+import usersService from '../../services/users.service';
 
 export interface IPayload {
     email: string,
@@ -26,7 +25,7 @@ class AuthUtils {
 
         const user = await usersService.searchUserByEmail(email).then(info => info?.toJSON());
 
-        if (!user) throw new Error(JSON.stringify({ message: 'User not exists!' }));
+        if (!user) throw new Error(JSON.stringify({ code: 404, message: 'User not exists!' }));
 
         return bcrypt.compare(password, user.password);
 
@@ -34,9 +33,24 @@ class AuthUtils {
 
     public verifyTokenPayload = (token: string) => {
 
-        const payload = jwt.verify(token, process.env.SECRET_KEY!) as IPayload;
+        try {
 
-        return payload;
+            const payload = jwt.verify(token, process.env.SECRET_KEY!) as IPayload;
+
+            // console.log(payload);
+
+            if (payload === undefined) console.log('');
+
+            return payload;
+            
+        } catch (error) {
+            
+            // console.log('?', error);
+
+            // Para que no muestre solo 'invalid signature' de esta forma se controla el error de verificacion.
+            if (error instanceof Error) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid!' }));
+
+        }
 
     };
     
