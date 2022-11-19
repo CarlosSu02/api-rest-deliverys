@@ -15,6 +15,8 @@ import rolesRoutes from './routes/roles.routes';
 import rolController from './controllers/role.controller';
 import usersRoutes from './routes/users.routes';
 import billsRoutes from './routes/bills.routes';
+import categoriesRoutes from './routes/categories.routes';
+import ingredientsRoutes from './routes/ingredients.routes';
 
 class App {
 
@@ -73,6 +75,8 @@ class App {
         this.express.use('/api/auth', authRoutes.router);
         this.express.use('/api/user', usersRoutes.router);
         this.express.use('/api', billsRoutes.router);
+        this.express.use('/api', categoriesRoutes.router);
+        this.express.use('/api', ingredientsRoutes.router);
 
     };
 
