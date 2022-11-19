@@ -15,6 +15,7 @@ class RolesRoutes {
 
     initRoutes = () => {
 
+        this.router.get('/users', authController.verifyToken, userController.getUsers);
         this.router.get('/profile', authController.verifyToken, userController.profile);
         this.router.patch('/update', authController.verifyToken, userController.updateUser);
         this.router.delete('/delete', userController.deleteUser);

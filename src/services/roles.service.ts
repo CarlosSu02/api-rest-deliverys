@@ -40,7 +40,7 @@ class RolesServices {
 
     public getRoleByEmail = async (email: string) => {
 
-        const role = await User.findOne({ where: { email: email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+        const role = await User.findOne({ where: { email }, include: [{ model: Role }] }).then(info => info?.toJSON());
 
         return role.role.type;
 
@@ -48,9 +48,9 @@ class RolesServices {
 
     public getRoleByName = async (type: string) => {
 
-        const role = await Role.findOne({ where: { type: type } });
+        const role = await Role.findOne({ where: { type } });
 
-        if (role !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
+        // if (role !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
 
         return role;
 
@@ -64,7 +64,7 @@ class RolesServices {
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        await this.getRoleByName(role.type);
+        if ((await this.getRoleByName(role.type)) !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
 
         return role;
 

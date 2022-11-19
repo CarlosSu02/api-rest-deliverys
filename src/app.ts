@@ -14,6 +14,7 @@ import { Category } from './models/category.model';
 import rolesRoutes from './routes/roles.routes';
 import rolController from './controllers/role.controller';
 import usersRoutes from './routes/users.routes';
+import billsRoutes from './routes/bills.routes';
 
 class App {
 
@@ -71,6 +72,7 @@ class App {
         this.express.use('/api', rolesRoutes.router);
         this.express.use('/api/auth', authRoutes.router);
         this.express.use('/api/user', usersRoutes.router);
+        this.express.use('/api', billsRoutes.router);
 
     };
 

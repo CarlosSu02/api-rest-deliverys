@@ -5,12 +5,39 @@ import { User } from "../models/user.model";
 import authUtils from "../common/utils/auth.utils";
 import generalUtils from "../common/utils/general.utils";
 import rolesService from "./roles.service";
+import { ResponseDto } from "../common/dto/response.dto";
 
 class UserService {
+
+    // superadmin
+    public getUsers = async (): Promise<ResponseDto> => {
+
+        const searchAllUsers = await User.findAndCountAll();
+
+        if (searchAllUsers.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'There are not users added!' }));
+
+        return {
+            code: 200,
+            message: 'List of all users.',
+            count: searchAllUsers.count,
+            results: searchAllUsers.rows 
+        };
+
+    };
 
     public profile = async (email: string) => {
 
         const existsUser = await User.findOne({ attributes: [ 'id', 'name', 'phone', 'address', 'email' ], where: { email } }); 
+        
+        if (!(existsUser)) throw new Error(JSON.stringify({ error: 404, message: 'User not exists!' }));
+
+        return existsUser;
+
+    };
+
+    public searchUserById = async (id: number) => {
+
+        const existsUser = await User.findOne({ where: { id } }); 
         
         if (!(existsUser)) throw new Error(JSON.stringify({ error: 404, message: 'User not exists!' }));
 

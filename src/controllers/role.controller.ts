@@ -16,15 +16,14 @@ class RoleController {
             type: 'superadmin'
         },
         {
-            id: 1,
             type: 'vendedor'
         },
         {
-            id: 2,
             type: 'comprador'
         }
     ];
 
+    // superadmin
     public getRoles = async (req: Request, res: Response) => {
 
         try {
@@ -194,7 +193,6 @@ class RoleController {
                 });
 
             }
-           
             
         } catch (error) {
 

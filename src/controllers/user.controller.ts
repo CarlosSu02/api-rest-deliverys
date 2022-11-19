@@ -12,6 +12,32 @@ import { SigninUserDto } from "../dtos/signin_user.dto";
 
 class UserController {
 
+    // superadmin
+    public getUsers = async (req: Request, res: Response) => {
+
+        try {
+
+            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+
+            const users = await usersService.getUsers();
+
+            res.status(users.code!).send(users);
+            
+        } catch (error) {
+
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
+            
+            }
+            
+            return res.status(500).send(String(error));
+            
+        }
+
+    };
+
     public profile = async (req: Request, res: Response) => {
 
         try {

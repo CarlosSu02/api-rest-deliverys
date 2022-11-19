@@ -37,8 +37,12 @@ export const Bill = connection.connection.define(
             autoIncrement: true,
             primaryKey: true
         },
+        sellerEmail: {
+            type: Sequelize.DataType.STRING(100),
+            allowNull: false
+        },
         date: {
-            type: Sequelize.DataType.DATE,
+            type: Sequelize.DataType.STRING,
             allowNull: false
         },
         tax: {
