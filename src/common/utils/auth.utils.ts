@@ -48,7 +48,7 @@ class AuthUtils {
             // console.log('?', error);
 
             // Para que no muestre solo 'invalid signature' de esta forma se controla el error de verificacion.
-            if (error instanceof Error) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid!' }));
+            if (error instanceof Error) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' }));
 
         }
 

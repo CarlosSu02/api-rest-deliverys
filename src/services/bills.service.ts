@@ -3,7 +3,6 @@
 import { ResponseDto } from "../common/dto/response.dto";
 import generalUtils from "../common/utils/general.utils";
 import { CreateBillDto } from "../dtos/create_bill.dto";
-import { CreateRoleDto } from "../dtos/create_role.dto";
 import { BillDetail } from "../models/bill.detail.model";
 import { Bill } from "../models/bill.model";
 import { Role } from "../models/role.model";
@@ -64,7 +63,7 @@ class BillsServices {
             message: 'These are your sales.',
             count: billsPurchase.count,
             results: billsPurchase.rows
-        };;
+        };
 
     };
 

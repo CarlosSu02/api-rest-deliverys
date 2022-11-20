@@ -20,7 +20,7 @@ class BillController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the bills!'}));
 
             const bills = await billsService.getAllBills();
 

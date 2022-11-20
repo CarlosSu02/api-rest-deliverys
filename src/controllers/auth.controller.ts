@@ -51,7 +51,7 @@ class AuthController {
 
             const response: ResponseDto = {
                 code: 201,
-                message: 'New user created successfully.',
+                message: 'New user created successfully. Please sign in to the application for use.',
                 results: newUser
             };
 
@@ -95,7 +95,6 @@ class AuthController {
                 message: 'Successful login.',
                 results: signinUser
             };
-
 
             // Token
             const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
@@ -169,8 +168,11 @@ class AuthController {
  
         try {
 
-            const token = req.header('auth-token');
-        
+            const token = req.header('auth-token') ?? 
+                ((req.rawHeaders.includes('Authorization') && req.rawHeaders.some(f => (/(Bearer auth-token: )+?([\w]+\.(\w+\.)+[\w\-])+/).test(f))) 
+                ? req.rawHeaders.find(f => f.match(/(Bearer auth-token: )+?/))!.replace(/(Bearer auth-token: )+?/, '') 
+                : null);
+
             if(!token) throw new Error(JSON.stringify({ code: 401, message: 'Access denied!' }));
         
             if(!token.match(/^[\w]+\.(\w+\.)+[\w\-]+$/)) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid!' }));
