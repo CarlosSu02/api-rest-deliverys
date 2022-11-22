@@ -19,6 +19,7 @@ import billsRoutes from './routes/bills.routes';
 import categoriesRoutes from './routes/categories.routes';
 import ingredientsRoutes from './routes/ingredients.routes';
 import productsRoutes from './routes/products.routes';
+import billsDetailRoutes from './routes/bills.detail.routes';
 
 class App {
 
@@ -81,6 +82,7 @@ class App {
         this.express.use('/api', categoriesRoutes.router);
         this.express.use('/api', ingredientsRoutes.router);
         this.express.use('/api', productsRoutes.router);
+        this.express.use('/api', billsDetailRoutes.router)
 
     };
 
