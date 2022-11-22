@@ -1,25 +1,25 @@
 
-// recipe model
+// listProducts model
 
 import * as Sequelize from "sequelize-typescript"
 import Connection from "../database/connection"
 
 const connection = new Connection();
 
-export interface RecipeAddModel {
-    ingredientId: number,
+export interface ListProductsAddModel {
+    billDetailId: number,
     productId: number
 }
 
-export interface RecipeModel extends Sequelize.Model<RecipeModel, RecipeAddModel> {
-    ingredientId: number,
+export interface ListProductsModel extends Sequelize.Model<ListProductsModel, ListProductsAddModel> {
+    billDetailId: number,
     productId: number
 }
 
-export const Recipe = connection.connection.define(
-    'recipes', 
+export const ListProducts = connection.connection.define(
+    'listProducts', 
     {
-        ingredientId: {
+        billDetailId: {
             type: Sequelize.DataType.INTEGER,
             primaryKey: true,
             allowNull : false

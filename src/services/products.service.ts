@@ -22,13 +22,15 @@ class ProductsService{
 
     }
 
-    public validationAddCategory = async (product: CreateProductDto): Promise<CreateProductDto> => {
+    public validationAddProduct = async (product: CreateProductDto): Promise<CreateProductDto> => {
 
         const errors = await generalUtils.errorsFromValidate(product);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if ((await this.searchProductByDescription(product.description))) throw new Error(JSON.stringify({ code: 404, message: 'Product exists!' }));
+        product.name = generalUtils.formattingWords(product.name);
+
+        // if ((await this.searchProductByName(product.name))) throw new Error(JSON.stringify({ code: 404, message: 'Product exists!' }));
 
         await categoriesService.searchCategoryById(product.categoryId);
 
@@ -36,17 +38,19 @@ class ProductsService{
 
     };
 
-    public searchProductByDescription = async(description: string) => {
+    public searchProductByName = async(name: string) => {
 
-        const product = await Product.findOne({ where: { description: description }});
+        name = generalUtils.formattingWords(name);
+
+        const product = await Product.findOne({ where: { name: name }});
         
         if(product !== null) throw new Error(JSON.stringify({ code: 400, message: 'Product already exists!' }));
 
         return product;
 
-    }
+    };
 
-    public searchProductById = async(id: number) => {
+    public searchProductById = async (id: number) => {
 
         const product = await Product.findByPk(id);
 
@@ -54,7 +58,17 @@ class ProductsService{
 
         return product;
 
-    }
+    };
+
+    public searchProductBySeller = async (name: string, sellerId: number) => {
+
+        const product = await Product.findOne({ where: { name, sellerId } });
+
+        if(product !== null) throw new Error(JSON.stringify({ code: 400, message: 'Product already exists!' }));
+
+        return product;
+
+    };
 
 }
 

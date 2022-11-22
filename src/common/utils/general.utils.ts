@@ -32,6 +32,12 @@ class GeneralUtils {
         });
 
     };
+
+    public formattingWords = (words: string) => {
+        
+        return words.trim().toLowerCase().split(' ').filter(s => s !== '').join(' ').replace(/(^\w{1})|(\s+\w{1})/g, word => word.toUpperCase());
+
+    };
     
 }
 

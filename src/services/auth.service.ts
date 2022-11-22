@@ -12,11 +12,12 @@ class AuthService {
 
     public validationSignupUser = async (user: SignupUserDto): Promise<SignupUserDto> => {
 
-        user.email = (user.email).toLowerCase();
-
         const errors = await generalUtils.errorsFromValidate(user);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
+
+        user.email = (user.email).toLowerCase();
+        user.name = generalUtils.formattingWords(user.name);
 
         if ((await userService.searchUserByEmail(user.email!))) throw new Error(JSON.stringify({ code: 400, message: 'User already exists!' }));
         
@@ -30,13 +31,13 @@ class AuthService {
 
     public validationSigninUser = async (user: SigninUserDto): Promise<SigninUserDto> => {
 
-        user.email = (user.email).toLowerCase();
-
-        const { email, password } = user;
-
         const errors = await generalUtils.errorsFromValidate(user);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
+
+        user.email = (user.email).toLowerCase();
+
+        const { email, password } = user;
 
         if (!(await userService.searchUserByEmail(email))) throw new Error(JSON.stringify({ code: 404, message: 'User not exists!' }));
         if (!(await authUtils.validatePassword(email, password))) throw new Error(JSON.stringify({ code: 400, message: 'Password is not valid!' }));
@@ -48,16 +49,16 @@ class AuthService {
     };
 
     public changePassword = async (user: ChangePasswordDto): Promise<ChangePasswordDto> => {
+        
+        const errors = await generalUtils.errorsFromValidate(user);
 
+        if (errors !== undefined) throw new Error(JSON.stringify(errors));
+        
         user.email = (user.email).toLowerCase();
 
         const { email, password, new_password } = user;
 
         if (password === new_password) throw new Error(JSON.stringify({ code: 400, message: 'The new password must be different!' }));
-        
-        const errors = await generalUtils.errorsFromValidate(user);
-
-        if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
         if (!(await userService.searchUserByEmail(email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not exists!' }));
         if (!(await authUtils.validatePassword(email!, password!))) throw new Error(JSON.stringify({ code: 400, message: 'Password is not valid!' }));

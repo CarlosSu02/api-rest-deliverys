@@ -1,5 +1,6 @@
 import * as Sequelize from "sequelize-typescript";
 import Connection from "../database/connection";
+import { ListProducts } from "./listProducts.model";
 
 const connection = new Connection();
 
@@ -42,3 +43,15 @@ export const BillDetail = connection.connection.define(
         timestamps: false
     }
 );
+
+BillDetail.hasMany(ListProducts, {
+    foreignKey: 'billDetailId',
+    sourceKey: 'id'
+});
+
+ListProducts.belongsTo(BillDetail, {
+    foreignKey: 'billDetailId',
+    targetKey: 'id'
+});
+
+

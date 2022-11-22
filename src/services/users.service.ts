@@ -62,6 +62,8 @@ class UserService {
     };
 
     public validationUpdateInfoUser = async (user: UpdateInfoUserDto, email: string): Promise<UpdateInfoUserDto> => {
+        
+        if (user.name !== undefined) user.name = generalUtils.formattingWords(user.name);
 
         const errors = await generalUtils.errorsFromValidate(user);
 

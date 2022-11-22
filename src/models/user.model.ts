@@ -4,6 +4,7 @@
 import * as Sequelize from "sequelize-typescript"
 import Connection from "../database/connection"
 import { Bill } from "./bill.model";
+import { Product } from "./product.model";
 
 const connection = new Connection();
 
@@ -68,5 +69,15 @@ User.hasMany(Bill, {
 
 Bill.belongsTo(User, {
     foreignKey: 'userId',
+    targetKey: 'id'
+});
+
+User.hasMany(Product, {
+    foreignKey: 'sellerId',
+    sourceKey: 'id'
+});
+
+Product.belongsTo(User, {
+    foreignKey: 'sellerId',
     targetKey: 'id'
 });

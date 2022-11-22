@@ -2,12 +2,7 @@
 import { IsString, IsEmail, IsNotEmpty, IsNumber, Length, IsDate, IsBoolean } from "class-validator";
 
 export class CreateBillDto {
-
-    @Length(3, 50)
-    @IsEmail()
-    @IsNotEmpty()
-    public sellerEmail!: string;
-    
+  
     @IsString()
     @IsNotEmpty()
     public date!: string;

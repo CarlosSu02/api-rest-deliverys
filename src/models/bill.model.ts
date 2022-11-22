@@ -15,7 +15,6 @@ export interface BillAddModel {
     tax: number,
     discount: number,
     paymentForm: string,
-    isPurchase: boolean
 }
 
 export interface BillModel extends Sequelize.Model<BillModel, BillAddModel> {
@@ -25,8 +24,7 @@ export interface BillModel extends Sequelize.Model<BillModel, BillAddModel> {
     userId: number,
     tax: number,
     discount: number,
-    paymentForm: string,
-    isPurchase: boolean
+    paymentForm: string
 }
 
 export const Bill = connection.connection.define(
@@ -36,10 +34,6 @@ export const Bill = connection.connection.define(
             type: Sequelize.DataType.INTEGER,
             autoIncrement: true,
             primaryKey: true
-        },
-        sellerEmail: {
-            type: Sequelize.DataType.STRING(100),
-            allowNull: false
         },
         date: {
             type: Sequelize.DataType.STRING,
@@ -55,10 +49,6 @@ export const Bill = connection.connection.define(
         },
         paymentForm: {
             type: Sequelize.DataType.STRING(100),
-            allowNull: false
-        },
-        isPurchase: {
-            type: Sequelize.DataType.BOOLEAN,
             allowNull: false
         }
     },

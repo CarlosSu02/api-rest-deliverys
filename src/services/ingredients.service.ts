@@ -33,7 +33,7 @@ class IngredientsService{
             results: {ingredientsData}
         };
 
-    } 
+    }; 
 
     public validationAddIngredient = async(ingredient: CreateIngredientDto): Promise<CreateIngredientDto> => {
 
@@ -41,21 +41,25 @@ class IngredientsService{
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if ((await this.searchIngredientByName(ingredient.description))) throw new Error(JSON.stringify({ code: 404, message: 'Ingredient exists!' }));
+        ingredient.name = generalUtils.formattingWords(ingredient.name);
+
+        if ((await this.searchIngredientByName(ingredient.name))) throw new Error(JSON.stringify({ code: 404, message: 'Ingredient exists!' }));
 
         return ingredient;
 
-    }
+    };
 
-    public searchIngredientByName = async(description: string) => {
+    public searchIngredientByName = async(name: string) => {
 
-        const ingredient = await Ingredient.findOne({ where: { description: description } });
+        name = generalUtils.formattingWords(name);
+
+        const ingredient = await Ingredient.findOne({ where: { name: name } });
 
         if(ingredient !== null) throw new Error(JSON.stringify({ code: 400, message: 'Ingredient already exists!' }));
 
         return ingredient;
 
-    }
+    };
 
     public searchIngredientsById = async(id: number) => {
 
@@ -65,7 +69,7 @@ class IngredientsService{
 
         return ingredient;
 
-    }
+    };
 
 }
 

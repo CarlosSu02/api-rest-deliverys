@@ -40,15 +40,19 @@ class CategoriesServices {
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-        if ((await this.searchCategoryByDescription(category.description))) throw new Error(JSON.stringify({ code: 404, message: 'Category exists!' }));
+        category.name = generalUtils.formattingWords(category.name);
+
+        if ((await this.searchCategoryByName(category.name))) throw new Error(JSON.stringify({ code: 404, message: 'Category exists!' }));
 
         return category;
 
     };
 
-    public searchCategoryByDescription = async (description: string) => {
+    public searchCategoryByName = async (name: string) => {
 
-        const category = await Category.findOne({ where: { description: description } });
+        name = generalUtils.formattingWords(name);
+
+        const category = await Category.findOne({ where: { name: name } });
 
         if (category !== null) throw new Error(JSON.stringify({ code: 400, message: 'Category already exists!' }));
 

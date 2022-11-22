@@ -26,7 +26,7 @@ export const Category = connection.connection.define(
             autoIncrement: true,
             primaryKey: true
         },
-        description: {
+        name: {
             type: Sequelize.DataType.STRING(200),
             allowNull: false
         }

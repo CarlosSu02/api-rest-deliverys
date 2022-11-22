@@ -5,6 +5,7 @@ import { ResponseDto } from '../common/dto/response.dto';
 import { CreateProductDto } from '../dtos/create_product.dto';
 import { Product } from '../models/product.model';
 import productsService from '../services/products.service';
+import usersService from '../services/users.service';
 import authController from './auth.controller';
 
 class ProductController{
@@ -39,7 +40,11 @@ class ProductController{
             if(authController.token.role === 'comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
             
             const createProductDto = plainToClass(CreateProductDto, req.body);
-            const validatedProduct = await productsService.validationAddCategory(createProductDto);
+            const validatedProduct = await productsService.validationAddProduct(createProductDto);
+
+            validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
+
+            await productsService.searchProductBySeller(validatedProduct.name, validatedProduct.sellerId!);
 
             const newProduct = await Product.create({
                 ...validatedProduct
@@ -80,7 +85,7 @@ class ProductController{
             const product = await productsService.searchProductById(+id);
 
             const updateProductDto = plainToClass(CreateProductDto, req.body);
-            const validatedProduct = await productsService.validationAddCategory(updateProductDto);
+            const validatedProduct = await productsService.validationAddProduct(updateProductDto);
 
             product.set({...validatedProduct});
             await product.save();

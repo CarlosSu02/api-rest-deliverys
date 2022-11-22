@@ -1,9 +1,14 @@
 
-import { IsBoolean, IsNotEmpty, IsNumber, IsString, Length } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsString, Length, IsOptional } from "class-validator";
 
 export class CreateProductDto{
 
-    @Length(3, 50)
+    @Length(3, 100)
+    @IsString()
+    @IsNotEmpty()
+    public name!: string;
+
+    @Length(3, 300)
     @IsString()
     @IsNotEmpty()
     public description!: string;
@@ -15,10 +20,6 @@ export class CreateProductDto{
     @IsNumber()
     @IsNotEmpty()
     public priceNotTax!: number;
-
-    @IsNumber()
-    @IsNotEmpty()
-    public totalPrice!: number;
 
     @IsBoolean()
     @IsNotEmpty()
@@ -36,5 +37,10 @@ export class CreateProductDto{
     @IsNumber()
     @IsNotEmpty()
     public categoryId!: number;
+
+    @IsNumber()
+    // @IsNotEmpty()
+    @IsOptional()
+    public sellerId?: number;
 
 }

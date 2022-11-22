@@ -6,7 +6,7 @@ export class CreateIngredientDto{
     @Length(3, 50)
     @IsString()
     @IsNotEmpty()
-    public description!: string;
+    public name!: string;
 
     @IsNumber()
     public amount!: number;

@@ -11,6 +11,7 @@ import { Product } from './models/product.model';
 import { Recipe } from './models/recipe.model';
 import { Ingredient } from './models/ingredient.model';
 import { Category } from './models/category.model';
+import { ListProducts } from './models/listProducts.model';
 import rolesRoutes from './routes/roles.routes';
 import rolController from './controllers/role.controller';
 import usersRoutes from './routes/users.routes';
@@ -54,6 +55,7 @@ class App {
         await Ingredient.sync({ force: false });
         await Recipe.sync({ force: false });
         await BillDetail.sync({ force: false });
+        await ListProducts.sync({ force: false });
 
         await this.connection.connection.sync({ force: false })
             .then(() => {

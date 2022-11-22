@@ -1,24 +1,28 @@
 
-import { IsString, IsEmail, IsNotEmpty, IsNumber, Length } from "class-validator";
+import { IsString, IsEmail, IsNotEmpty, IsNumber, Length, IsOptional } from "class-validator";
 
 export class UpdateInfoUserDto {
 
     @Length(3, 50)
     @IsString()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public name!: string;
     
     @IsNumber()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public phone!: number;
 
     @Length(3, 100)
     @IsString()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public address!: string;
 
     @IsNumber()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public roleId!: number;
 
 } 

@@ -48,6 +48,8 @@ class RolesServices {
 
     public getRoleByName = async (type: string) => {
 
+        type = generalUtils.formattingWords(type);
+
         const role = await Role.findOne({ where: { type } });
 
         // if (role !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
@@ -58,11 +60,11 @@ class RolesServices {
 
     public validationAddRole = async (role: CreateRoleDto): Promise<CreateRoleDto> => {
 
-        role.type = (role.type).toLowerCase().trim();
-
         const errors = await generalUtils.errorsFromValidate(role);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
+
+        role.type = generalUtils.formattingWords(role.type);
 
         if ((await this.getRoleByName(role.type)) !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
 

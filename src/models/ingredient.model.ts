@@ -34,7 +34,7 @@ export const Ingredient = connection.connection.define(
             autoIncrement: true,
             primaryKey: true
         },
-        description: {
+        name: {
             type: Sequelize.DataType.STRING(100),
             allowNull: true
         },
