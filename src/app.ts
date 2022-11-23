@@ -76,7 +76,7 @@ class App {
 
     routes = () => {
 
-        this.express.use('/api', documentationController.documentation);
+        this.express.use('/api/documentation', documentationController.documentation);
         this.express.use('/api', rolesRoutes.router);
         this.express.use('/api/auth', authRoutes.router);
         this.express.use('/api/user', usersRoutes.router);
