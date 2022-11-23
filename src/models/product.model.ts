@@ -1,6 +1,5 @@
 import * as Sequelize from "sequelize-typescript";
 import Connection from "../database/connection";
-import { BillDetail } from "./bill.detail.model";
 import { ListProducts } from "./listProducts.model";
 import { Recipe } from "./recipe.model";
 

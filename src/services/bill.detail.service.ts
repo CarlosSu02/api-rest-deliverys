@@ -1,3 +1,4 @@
+
 import { ResponseDto } from "../common/dto/response.dto";
 import generalUtils from "../common/utils/general.utils";
 import { CreateBillDetailDto } from "../dtos/create_bill.detail.dto";
@@ -12,10 +13,9 @@ class BillDetailServices {
 
         if (searchAllBillDetails.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'There are not bill details added!' }));
 
-            billDetailsData = searchAllBillDetails.rows; 
-            messageToReturn = 'List of all categories.';
+        billDetailsData = searchAllBillDetails.rows; 
+        messageToReturn = 'List of all categories.';
        
-
         return {
             code: 200,
             message: messageToReturn,
@@ -25,7 +25,7 @@ class BillDetailServices {
 
     };
 
-   public validationAddBillDetail = async (billDetail: CreateBillDetailDto): Promise<CreateBillDetailDto> => {
+    public validationAddBillDetail = async (billDetail: CreateBillDetailDto): Promise<CreateBillDetailDto> => {
 
        const errors = await generalUtils.errorsFromValidate(billDetail);
 
@@ -35,9 +35,9 @@ class BillDetailServices {
 
        return billDetail;
 
-   };
+    };
 
-   public searchCategoryByProductId = async (billId: number) => {
+    public searchCategoryByProductId = async (billId: number) => {
 
        const billDetail = await BillDetail.findOne({ where: { billId: billId } });
 
@@ -45,7 +45,7 @@ class BillDetailServices {
 
       return billDetail;
 
-   };
+    };
 
     public searchBillDetailById = async (id: number) => {
 
@@ -55,7 +55,7 @@ class BillDetailServices {
 
         return billDetail;
 
-    }
+    };
 
 }
 

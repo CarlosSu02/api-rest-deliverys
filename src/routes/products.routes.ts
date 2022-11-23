@@ -11,7 +11,7 @@ class ProductsRoutes{
 
         this.initRoutes();
 
-    }
+    };
 
     initRoutes(){
 
@@ -20,7 +20,7 @@ class ProductsRoutes{
         this.router.patch('/products/:id', authController.verifyToken, productController.updateProduct);
         this.router.delete('/products/:id', authController.verifyToken, productController.deteleProduct);
 
-    }
+    };
 
 }
 

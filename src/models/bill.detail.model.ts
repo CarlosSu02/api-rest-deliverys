@@ -5,17 +5,17 @@ import { ListProducts } from "./listProducts.model";
 const connection = new Connection();
 
 export interface BillDetailAddModel {
-    id: number, 
-    productId: string, 
-    amount: number, 
-    price: number
+    id?: number, 
+    totalAmount: number, 
+    totalPrice: number
+    billId: number
 }
   
 export interface BillDetailModel extends Sequelize.Model <BillDetailModel, BillDetailAddModel> {
     id: number, 
-    productId: number, 
-    amount: number, 
-    price: number
+    totalAmount: number, 
+    totalPrice: number,
+    billId: number
 }
   
 export const BillDetail = connection.connection.define(
@@ -26,15 +26,11 @@ export const BillDetail = connection.connection.define(
             autoIncrement: true,
             primaryKey: true
         },
-        productId: {
+        totalAmount: {
             type: Sequelize.DataType.INTEGER,
             allowNull: false
         },
-        amount: {
-            type: Sequelize.DataType.INTEGER,
-            allowNull: false
-        },
-        price: {
+        totalPrice: {
             type: Sequelize.DataType.INTEGER,
             allowNull: false
         }

@@ -68,7 +68,7 @@ class CategoriesServices {
 
         return category;
 
-    }
+    };
 
 }
 

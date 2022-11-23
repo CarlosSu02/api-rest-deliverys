@@ -11,7 +11,7 @@ class IngredientsRoutes{
 
         this.initRoutes();
 
-    }
+    };
 
     initRoutes = () => {
 
@@ -20,7 +20,7 @@ class IngredientsRoutes{
         this.router.patch('/ingredients/:id', authController.verifyToken, ingredientController.updateIngredient);
         this.router.delete('/ingredients/:id', authController.verifyToken, ingredientController.deleteIngredient);
 
-    }
+    };
 
 }
 

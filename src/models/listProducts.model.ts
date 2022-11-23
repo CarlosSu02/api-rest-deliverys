@@ -29,6 +29,10 @@ export const ListProducts = connection.connection.define(
             type: Sequelize.DataType.INTEGER,
             primaryKey: true,
             allowNull : false  
+        },
+        amount: {
+            type: Sequelize.DataType.INTEGER,
+            allowNull: false
         }
     },
     {

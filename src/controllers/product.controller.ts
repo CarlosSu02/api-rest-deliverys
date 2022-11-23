@@ -31,18 +31,21 @@ class ProductController{
 
         }
 
-    }
+    };
 
     public createProduct = async(req: Request, res: Response) => {
 
         try {
 
-            if(authController.token.role === 'comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
+            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
             
             const createProductDto = plainToClass(CreateProductDto, req.body);
+
+            createProductDto.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
+            
             const validatedProduct = await productsService.validationAddProduct(createProductDto);
 
-            validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
+            // validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
 
             await productsService.searchProductBySeller(validatedProduct.name, validatedProduct.sellerId!);
 
@@ -72,13 +75,13 @@ class ProductController{
 
         }
 
-    }
+    };
 
     public updateProduct = async(req: Request, res: Response) => {
 
         try {
 
-            if(authController.token.role === 'comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to edit products!' }));
+            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to edit products!' }));
 
             const { id } = req.params;
 
@@ -111,13 +114,13 @@ class ProductController{
 
         }
 
-    }
+    };
 
     public deteleProduct = async(req: Request, res: Response) => {
 
         try {
 
-            if(authController.token.role === 'comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to delete products!' }));
+            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to delete products!' }));
 
             const { id } = req.params;
 
@@ -127,7 +130,7 @@ class ProductController{
 
             const response: ResponseDto = {
                 code: 200,
-                message: `The product ${product.dataValues.type} deleted successfully.`,
+                message: `The product ${product.dataValues.name} deleted successfully.`,
                 results: {
                     ...product.dataValues
                 }
@@ -148,7 +151,7 @@ class ProductController{
 
         }
 
-    }
+    };
 
 }
 

@@ -2,7 +2,6 @@
 import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { ResponseDto } from '../common/dto/response.dto';
-import generalUtils from '../common/utils/general.utils';
 import { CreateRoleDto } from '../dtos/create_role.dto';
 import { Role } from '../models/role.model';
 import rolesService from '../services/roles.service';
@@ -13,13 +12,13 @@ class RoleController {
     private roles = [
         {
             id: 9999,
-            type: 'superadmin'
+            type: 'Superadmin'
         },
         {
-            type: 'vendedor'
+            type: 'Vendedor'
         },
         {
-            type: 'comprador'
+            type: 'Comprador'
         }
     ];
 
@@ -28,16 +27,7 @@ class RoleController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') {
-                
-                const response = plainToClass(ResponseDto, { code: 401, message: 'You do not have permission to list the roles!'});
-                const validatedResponse = await generalUtils.errorsFromValidate(response);
-
-                if (validatedResponse !== undefined) throw new Error(JSON.stringify(validatedResponse));
-
-                throw new Error(JSON.stringify(response));
-            
-            }
+            if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
 
             const roles = await rolesService.getRoles();
 
@@ -62,7 +52,7 @@ class RoleController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
 
             const payload = req.body;
 
@@ -100,7 +90,7 @@ class RoleController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
         
             const { id } = req.params;
 
@@ -142,7 +132,7 @@ class RoleController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
         
             const { id } = req.params;
 

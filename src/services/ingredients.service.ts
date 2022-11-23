@@ -1,7 +1,6 @@
 
 import { ResponseDto } from "../common/dto/response.dto";
 import generalUtils from "../common/utils/general.utils";
-import { CreateCategoryDto } from "../dtos/create_category.dto";
 import { CreateIngredientDto } from "../dtos/create_ingredient.dto";
 import { Ingredient } from "../models/ingredient.model";
 

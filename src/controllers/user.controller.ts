@@ -17,7 +17,7 @@ class UserController {
 
         try {
 
-            if (authController.token.role !== 'superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
 
             const users = await usersService.getUsers();
 

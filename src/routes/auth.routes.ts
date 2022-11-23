@@ -10,7 +10,7 @@ class AuthRoutes {
 
         this.initRoutes();
         
-    }
+    };
 
     initRoutes = () => {
 

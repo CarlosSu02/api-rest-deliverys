@@ -39,8 +39,8 @@ export class CreateProductDto{
     public categoryId!: number;
 
     @IsNumber()
-    // @IsNotEmpty()
-    @IsOptional()
+    @IsNotEmpty()
+    // @IsOptional()
     public sellerId?: number;
 
 }
