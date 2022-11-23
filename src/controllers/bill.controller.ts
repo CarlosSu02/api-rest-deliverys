@@ -43,17 +43,17 @@ class BillController {
 
         try {
 
-            // if (authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
-
             const { email, role } = authController.token;
 
-            if (role === 'Comprador') {
+            if (role === 'Buyer') {
 
                 const billsPurchase = await billsService.getBillsByEmailPurchase(email);
 
                 return res.status(billsPurchase.code!).send(billsPurchase);
             
             }
+            
+            if (role === 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the bills!'}));
 
             const billsSeller = await billsService.getBillsByEmailSeller(email);
 
@@ -62,8 +62,6 @@ class BillController {
         } catch (error) {
 
             if (error instanceof Error) {
-
-                console.log(error);
                 
                 const info = JSON.parse(error.message);
                 return res.status(info.code).send(info);
@@ -80,7 +78,7 @@ class BillController {
 
         try {
 
-            if (authController.token.role !== 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
 
             const payload = req.body;
 

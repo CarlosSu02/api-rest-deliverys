@@ -37,7 +37,7 @@ class ProductController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
             
             const createProductDto = plainToClass(CreateProductDto, req.body);
 
@@ -81,7 +81,7 @@ class ProductController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to edit products!' }));
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to edit products!' }));
 
             const { id } = req.params;
 
@@ -120,7 +120,7 @@ class ProductController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to delete products!' }));
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You dont have permission to delete products!' }));
 
             const { id } = req.params;
 

@@ -15,10 +15,10 @@ class RoleController {
             type: 'Superadmin'
         },
         {
-            type: 'Vendedor'
+            type: 'Seller'
         },
         {
-            type: 'Comprador'
+            type: 'Buyer'
         }
     ];
 

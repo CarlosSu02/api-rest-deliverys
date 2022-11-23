@@ -35,7 +35,7 @@ class IngredientController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add ingredients!' }))
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add ingredients!' }))
 
             const payload = req.body;
 
@@ -73,7 +73,7 @@ class IngredientController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to edit ingredients!' }))
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to edit ingredients!' }))
 
             const { id } = req.params;
 
@@ -112,7 +112,7 @@ class IngredientController{
 
         try {
 
-            if(authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to delete ingredients!'  }));
+            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to delete ingredients!'  }));
             
             const { id } = req.params;
 

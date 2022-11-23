@@ -36,7 +36,7 @@ class BillDetailController{
         
         try {
 
-            if (authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create bill details!'}));
+            if (authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create bill details!'}));
 
             const payload = req.body;
             const createBillDetailDto = plainToClass(CreateBillDetailDto, payload);

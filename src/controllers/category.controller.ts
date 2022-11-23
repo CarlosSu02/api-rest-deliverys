@@ -36,7 +36,7 @@ class CategoriesController{
         
         try {
 
-            if (authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create categories!'}));
+            if (authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create categories!'}));
 
             const payload = req.body;
             const createCategoryDto = plainToClass(CreateCategoryDto, payload);
@@ -73,7 +73,7 @@ class CategoriesController{
 
         try {
 
-            if (authController.token.role === 'Comprador') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create categories!'}));
+            if (authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create categories!'}));
 
             const { id } = req.params;
 
@@ -112,7 +112,7 @@ class CategoriesController{
 
         try {
 
-            if(authController.token.role === "Comprador") throw new Error(JSON.stringify({ code: 404, message: 'You dont have permission to delete categories!' }));
+            if(authController.token.role === "Buyer") throw new Error(JSON.stringify({ code: 404, message: 'You dont have permission to delete categories!' }));
 
             const { id } = req.params;
             const category = await categoriesService.searchCategoryById(+id); 
