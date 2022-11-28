@@ -1,5 +1,5 @@
 
-import { IsString, IsEmail, IsNotEmpty, IsNumber, Length } from "class-validator";
+import { IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateBillDetailDto {
 

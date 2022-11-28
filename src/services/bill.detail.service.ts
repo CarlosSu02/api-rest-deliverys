@@ -6,7 +6,7 @@ import { BillDetail } from "../models/bill.detail.model";
 
 class BillDetailServices {
 
-    public getBillDetails = async (role: string): Promise<ResponseDto> => {
+    public getBillDetails = async (): Promise<ResponseDto> => {
 
         var billDetailsData, messageToReturn;
         const searchAllBillDetails = await BillDetail.findAndCountAll();
@@ -14,7 +14,7 @@ class BillDetailServices {
         if (searchAllBillDetails.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'There are not bill details added!' }));
 
         billDetailsData = searchAllBillDetails.rows; 
-        messageToReturn = 'List of all categories.';
+        messageToReturn = 'List of all Bill Details.';
        
         return {
             code: 200,
@@ -31,17 +31,17 @@ class BillDetailServices {
 
       if (errors !== undefined) throw new Error(JSON.stringify(errors));
 
-      if ((await this.searchCategoryByProductId(billDetail.billId))) throw new Error(JSON.stringify({ code: 404, message: 'Category exists!' }));
+      if ((await this.searchBillDetailByBillId(billDetail.billId))) throw new Error(JSON.stringify({ code: 404, message: 'Bill Detail exists!' }));
 
        return billDetail;
 
     };
 
-    public searchCategoryByProductId = async (billId: number) => {
+    public searchBillDetailByBillId = async (billId: number) => {
 
        const billDetail = await BillDetail.findOne({ where: { billId: billId } });
 
-      if (billDetail !== null) throw new Error(JSON.stringify({ code: 400, message: 'billDetail already exists!' }));
+      if (billDetail !== null) throw new Error(JSON.stringify({ code: 400, message: 'Bill Detail already exists!' }));
 
       return billDetail;
 

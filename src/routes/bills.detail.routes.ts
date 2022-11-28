@@ -14,9 +14,8 @@ class BillsDetailRoutes {
 
     initRoutes = () => {
 
-        this.router.get('/billsdetail', authController.verifyToken, billDetailController.getBillDetails);
-        //this.router.get('/bills/user', authController.verifyToken, billController.getBills);
-        this.router.post('/billsdetail', authController.verifyToken, billDetailController.createBillDetail);
+        this.router.get('/billdetails', authController.verifyToken, billDetailController.getBillDetails);
+        this.router.post('/billdetails', authController.verifyToken, billDetailController.createBillDetail);
 
     };
 

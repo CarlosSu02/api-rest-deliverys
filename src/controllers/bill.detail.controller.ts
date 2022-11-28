@@ -13,7 +13,7 @@ class BillDetailController{
 
         try {
 
-            const billDetails = await billDetailsService.getBillDetails(authController.token.role);
+            const billDetails = await billDetailsService.getBillDetails();
 
             res.status(billDetails.code!).send(billDetails);
             
