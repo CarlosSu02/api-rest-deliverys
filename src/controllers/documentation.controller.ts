@@ -55,6 +55,10 @@ class DocumentationController {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/auth/change_password`,
                             },
+                            {
+                                method: 'DELETE',
+                                url: `http://localhost:${PORT}/api/auth/signout`,
+                            },
                         ],
                     },
                     {

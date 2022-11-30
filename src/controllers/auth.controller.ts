@@ -47,15 +47,17 @@ class AuthController {
             const role = await rolesService.getRoleByEmail(validatedUser.email);
 
             // Token
-            const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
-
+            // const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
+            
             const response: ResponseDto = {
                 code: 201,
                 message: 'New user created successfully. Please sign in to the application for use.',
                 results: newUser
             };
 
-            res.status(response.code!).header('Cache-Control', `auth-token: ${token}`).send(response);
+            res.status(response.code!).cookie('access_token', accessToken.cookie).cookie('refresh_token', refreshToken.cookie).header('Cache-Control', `auth-token: ${accessToken.token}`).send(response);
 
         } catch (error) {
 
@@ -96,10 +98,13 @@ class AuthController {
                 results: signinUser
             };
 
-            // Token
-            const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
+            // Tokens
+            // const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
 
-            res.status(response.code!).header('Cache-Control', `auth-token: ${token}`).send(response);
+            // .cookie('refresh-token', serialized)
+            res.status(response.code!).cookie('access_token', accessToken.cookie).cookie('refresh_token', refreshToken.cookie).header('Cache-Control', `auth-token: ${accessToken.token}`).send(response);
 
         } catch (error) {
 
@@ -112,6 +117,33 @@ class AuthController {
             
             return res.status(500).send(String(error));
 
+        }
+
+    };
+
+    // cerrar sesion
+    public signout = async (req: Request, res: Response) => {
+
+        try {
+
+            const response: ResponseDto = {
+                code: 200,
+                message: 'Session ended, if you wish to use the application again, please sign in again.'
+            };
+
+            res.status(response.code!).cookie('access_token', '').cookie('refresh_token', '').send(response);
+
+        } catch (error) {
+
+            if (error instanceof Error) {
+                
+                const info = JSON.parse(error.message);
+                return res.status(info.code).send(info);
+            
+            }
+            
+            return res.status(500).send(String(error));
+                              
         }
 
     };
@@ -168,21 +200,44 @@ class AuthController {
  
         try {
 
-            const token = req.header('auth-token') ?? 
+            // console.log(req.cookies);
+            // console.log(req.rawHeaders);
+
+            const cookieRefreshToken = (req.cookies.refresh_token !==  undefined) ? req.cookies.refresh_token.split(' ').find((d: string) => d.match(/(refresh_token\=)+([\w]+)/)) : null;
+            const refreshToken = (cookieRefreshToken) ? cookieRefreshToken.match(/(refresh_token\=)+?([\w]+\.(\w+\.)+[\w\-]+)/)[2] : null;
+            
+            const cookieAccessToken = (req.cookies.access_token !==  undefined) ? req.cookies.access_token.split(' ').find((d: string) => d.match(/(access_token\=)+([\w]+)/)) : null;
+            
+            const accessToken = ((cookieAccessToken) ? cookieAccessToken.match(/(access_token\=)+?([\w]+\.(\w+\.)+[\w\-]+)/)[2] : null) ??
+                req.header('auth-token') ?? 
                 ((req.rawHeaders.includes('Authorization') && req.rawHeaders.some(f => (/(Bearer auth-token: )+?([\w]+\.(\w+\.)+[\w\-])+/).test(f))) 
                 ? req.rawHeaders.find(f => f.match(/(Bearer auth-token: )+?/))!.replace(/(Bearer auth-token: )+?/, '') 
                 : null);
+                
+            if(!accessToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied!' }));
+            if(!refreshToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied! Please sign in again.' }));
 
-            if(!token) throw new Error(JSON.stringify({ code: 401, message: 'Access denied!' }));
-        
-            if(!token.match(/^[\w]+\.(\w+\.)+[\w\-]+$/)) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid!' }));
+            const validatedRefreshToken = authUtils.verifyTokenPayload(refreshToken, process.env.SECRET_KEY_REFRESH_TOKEN!);
+            if (typeof validatedRefreshToken === 'string') throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' })); 
 
-            const validatedToken = authUtils.verifyTokenPayload(token); 
+            let validatedAccessToken = authUtils.verifyTokenPayload(accessToken, process.env.SECRET_KEY_ACCESS_TOKEN!);
+            
+            if (typeof validatedAccessToken === 'string') { 
 
-            if (!(await userService.searchUserByEmail(validatedToken!.email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not found!' }));
+                const decode = jwt.decode(accessToken, { complete: true });
+                const payload = decode?.payload as IPayload;
+                
+                const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
 
-            // res.status(200).send(payload);
-            this.token = validatedToken!;
+                validatedAccessToken = authUtils.verifyTokenPayload(newAccessToken.token, process.env.SECRET_KEY_ACCESS_TOKEN!) as IPayload;
+
+                res.cookie('access_token', newAccessToken.cookie);
+
+            }
+
+            if (!(await userService.searchUserByEmail(validatedAccessToken!.email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not found!' }));
+
+            this.token = validatedAccessToken!;
 
             next();
            

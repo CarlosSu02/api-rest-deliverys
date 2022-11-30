@@ -18,6 +18,7 @@ class AuthRoutes {
         this.router.post('/signup', authController.signup);
         this.router.post('/signin', authController.signin);
         this.router.patch('/change_password', authController.changePassword);
+        this.router.delete('/signout', authController.signout);
 
     };
 

@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import usersService from '../../services/users.service';
 
+// testing refreshjwt
+import { serialize } from "cookie";
+
 export interface IPayload {
     email: string,
     role: string,
@@ -31,15 +34,15 @@ class AuthUtils {
 
     };
 
-    public verifyTokenPayload = (token: string) => {
+    public verifyTokenPayload = (token: string, secretKey: string) => {
 
         try {
 
-            const payload = jwt.verify(token, process.env.SECRET_KEY!) as IPayload;
+            const payload = jwt.verify(token, secretKey) as IPayload;
 
             // console.log(payload);
 
-            if (payload === undefined) console.log('');
+            // if (payload === undefined) console.log('');
 
             return payload;
             
@@ -48,9 +51,23 @@ class AuthUtils {
             // console.log('?', error);
 
             // Para que no muestre solo 'invalid signature' de esta forma se controla el error de verificacion.
-            if (error instanceof Error) throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' }));
-
+            if (error instanceof Error) return error.message;
+ 
         }
+
+    };
+
+    public createTokenCookie = (type: string, data: {}, secretKey: string, expire: string) => {
+
+        const token = jwt.sign(data, secretKey, { expiresIn: expire });
+        
+        const serialized = serialize(type, token, {
+            httpOnly: true,
+            sameSite: 'strict',
+            path: '/'
+        });
+
+        return { cookie: serialized, token: token };
 
     };
     

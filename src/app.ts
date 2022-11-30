@@ -1,6 +1,7 @@
 
 import express, { json } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes';
 import Connection from './database/connection';
 import { Role } from './models/role.model';
@@ -42,6 +43,7 @@ class App {
 
         this.express.use(json());
         this.express.use(cors());
+        this.express.use(cookieParser());
 
     };
 
@@ -85,8 +87,8 @@ class App {
         this.express.use('/api', categoriesRoutes.router);
         this.express.use('/api', ingredientsRoutes.router);
         this.express.use('/api', productsRoutes.router);
-        this.express.use('/api', billsDetailRoutes.router)
-        this.express.use('/api', recipesRoutes.router)
+        this.express.use('/api', billsDetailRoutes.router);
+        this.express.use('/api', recipesRoutes.router);
 
     };
 
