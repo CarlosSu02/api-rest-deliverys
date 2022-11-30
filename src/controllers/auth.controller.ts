@@ -224,15 +224,23 @@ class AuthController {
             
             if (typeof validatedAccessToken === 'string') { 
 
-                const decode = jwt.decode(accessToken, { complete: true });
-                const payload = decode?.payload as IPayload;
-                
-                const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+                if (validatedAccessToken === 'jwt expired') {
 
-                validatedAccessToken = authUtils.verifyTokenPayload(newAccessToken.token, process.env.SECRET_KEY_ACCESS_TOKEN!) as IPayload;
+                    const decode = jwt.decode(accessToken, { complete: true });
+                    const payload = decode?.payload as IPayload;
+                    
+                    const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
 
-                res.cookie('access_token', newAccessToken.cookie);
+                    validatedAccessToken = authUtils.verifyTokenPayload(newAccessToken.token, process.env.SECRET_KEY_ACCESS_TOKEN!) as IPayload;
 
+                    res.cookie('access_token', newAccessToken.cookie);
+
+                } else {
+            
+                    throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' })); 
+            
+                }
+            
             }
 
             if (!(await userService.searchUserByEmail(validatedAccessToken!.email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not found!' }));
