@@ -29,7 +29,7 @@ class IngredientsService{
             code: 200,
             message: messageToReturn,
             count: searchAllIngredients.count,
-            results: {ingredientsData}
+            results: ingredientsData
         };
 
     }; 

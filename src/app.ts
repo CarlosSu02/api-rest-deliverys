@@ -23,6 +23,7 @@ import productsRoutes from './routes/products.routes';
 import billsDetailRoutes from './routes/bills.detail.routes';
 import recipesRoutes from './routes/recipes.routes'
 import documentationController from './controllers/documentation.controller';
+import categoryController from './controllers/category.controller';
 
 class App {
 
@@ -37,7 +38,7 @@ class App {
         this.db();
         this.routes();
 
-    }
+    };
     
     middlewares = () => {
 
@@ -66,7 +67,9 @@ class App {
             .then(() => {
 
                 console.log(`Connection has been established successfully.`);
+
                 rolController.insertRoles();
+                categoryController.insertCategories();
 
             })
             .catch((error) => {

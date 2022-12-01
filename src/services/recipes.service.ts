@@ -30,7 +30,6 @@ class RecipesServices {
                 ingredients: []
             };
 
-            console.log('name:', data.dataValues.name);
             data.dataValues.recipes.map((ing: any) => {
 
                 recipe.ingredients.push(ing.dataValues.ingredient.dataValues.name);

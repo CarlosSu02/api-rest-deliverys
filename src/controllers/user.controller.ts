@@ -121,21 +121,25 @@ class UserController {
 
             const payload = req.body;
             
+            if (authController.token.email !== payload.email) throw new Error(JSON.stringify({ code: 400, message: 'Email does not match!' }));
+
             const signinUserDto = plainToClass(SigninUserDto, payload);
             const validatedUser = await authService.validationSigninUser(signinUserDto);
            
             await User.destroy({ where: { email: validatedUser.email } }); 
-
+            
             const response: ResponseDto = {
                 code: 200,
                 message: `The user with email '${validatedUser.email}' deleted successfully.`
             }
 
-            res.status(response.code!).send(response);
+            res.status(response.code!).cookie('access_token', '').cookie('refresh_token', '').send(response);
 
         } catch (error) {
 
             if (error instanceof Error) {
+
+                console.log(error);
                 
                 const info = JSON.parse(error.message);
                 return res.status(info.code).send(info);

@@ -48,8 +48,8 @@ class AuthController {
 
             // Token
             // const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
-            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
-            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1min');
             
             const response: ResponseDto = {
                 code: 201,
@@ -100,8 +100,8 @@ class AuthController {
 
             // Tokens
             // const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
-            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
-            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1min');
 
             // .cookie('refresh-token', serialized)
             res.status(response.code!).cookie('access_token', accessToken.cookie).cookie('refresh_token', refreshToken.cookie).header('Cache-Control', `auth-token: ${accessToken.token}`).send(response);
@@ -121,7 +121,7 @@ class AuthController {
 
     };
 
-    // cerrar sesion
+    // Cerrar sesion
     public signout = async (req: Request, res: Response) => {
 
         try {
@@ -129,7 +129,7 @@ class AuthController {
             const response: ResponseDto = {
                 code: 200,
                 message: 'Session ended, if you wish to use the application again, please sign in again.'
-            };
+            }
 
             res.status(response.code!).cookie('access_token', '').cookie('refresh_token', '').send(response);
 
@@ -154,12 +154,14 @@ class AuthController {
         try {
 
             const payload = req.body;
+
+            if (this.token.email !== payload.email) throw new Error(JSON.stringify({ code: 400, message: 'Email does not match!' }));
             
             const changePasswordDto = plainToClass(ChangePasswordDto, payload);
             const validatedUser = await authService.changePassword(changePasswordDto);
             // const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] });
             const user = await userService.searchUserInclude(validatedUser.email, Role);
-
+            
             user?.set({
                 password: validatedUser.new_password
             });
@@ -224,13 +226,15 @@ class AuthController {
             if (typeof validatedAccessToken === 'string') { 
 
                 if (validatedAccessToken === 'jwt expired') {
-
+                    
                     const decode = jwt.decode(accessToken, { complete: true });
                     const payload = decode?.payload as IPayload;
                     
-                    const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+                    const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
 
                     validatedAccessToken = authUtils.verifyTokenPayload(newAccessToken.token, process.env.SECRET_KEY_ACCESS_TOKEN!) as IPayload;
+
+                    console.log('\nNew access_token:', newAccessToken.token);
 
                     res.cookie('access_token', newAccessToken.cookie);
 

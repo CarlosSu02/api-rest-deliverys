@@ -29,7 +29,7 @@ class IngredientController{
             return res.status(500).send(String(error));
         }
 
-    }
+    };
 
     public createIngredient = async(req: Request, res: Response) => {
 
@@ -67,7 +67,7 @@ class IngredientController{
 
         }
 
-    }
+    };
 
     public updateIngredient = async(req: Request, res: Response) => {
 
@@ -106,7 +106,7 @@ class IngredientController{
 
         }
 
-    }
+    };
 
     public deleteIngredient = async(req: Request, res: Response) => {
 
@@ -143,7 +143,7 @@ class IngredientController{
 
         }
 
-    }
+    };
 
 }
 

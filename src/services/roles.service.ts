@@ -6,11 +6,6 @@ import { CreateRoleDto } from "../dtos/create_role.dto";
 import { Role } from "../models/role.model";
 import { User } from "../models/user.model";
 
-interface IRoles {
-    count: number,
-    roles: any[]
-}
-
 class RolesServices {
 
     public getRoles = async (): Promise<ResponseDto> => {

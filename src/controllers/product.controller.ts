@@ -67,7 +67,6 @@ class ProductController{
             if(error instanceof Error){
 
                 const info = JSON.parse(error.message);
-                
                 return res.status(info.code).send(info);
 
             }
@@ -113,7 +112,6 @@ class ProductController{
             if(error instanceof Error){
 
                 const info = JSON.parse(error.message);
-                
                 return res.status(info.code).send(info);
 
             }

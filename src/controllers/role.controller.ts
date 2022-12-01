@@ -174,7 +174,7 @@ class RoleController {
 
             if (countRoles === 0) {
 
-                console.log(`\nThis is the first run of the application \nInserted roles in database from Array`);
+                console.log(`\nThis is the first run of the application. \nInserted roles in database from Array.`);
 
                 this.roles.forEach(async (rol) => {
                     

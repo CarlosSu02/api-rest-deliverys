@@ -43,7 +43,7 @@ class UserService {
 
         return existsUser;
 
-    }
+    };
     
     public searchUserByEmail = async (email: string) => {
 

@@ -6,7 +6,6 @@ import { CreateBillDto } from '../dtos/create_bill.dto';
 import { BillDetail, BillDetailAddModel } from '../models/bill.detail.model';
 import { Bill } from '../models/bill.model';
 import { ListProducts } from '../models/listProducts.model';
-import billDetailService from '../services/bill.detail.service';
 import billsService from '../services/bills.service';
 import productsService from '../services/products.service';
 import usersService from '../services/users.service';
@@ -155,7 +154,6 @@ class BillController {
 
             if (error instanceof Error) {
                                 
-                console.log(error)
                 const info = JSON.parse(error.message);
                 return res.status(info.code).send(info);
             

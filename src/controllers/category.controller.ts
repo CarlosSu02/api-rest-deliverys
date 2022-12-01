@@ -2,12 +2,43 @@
 import { plainToClass } from "class-transformer";
 import { Request, Response } from "express";
 import { ResponseDto } from "../common/dto/response.dto";
+import generalUtils from "../common/utils/general.utils";
 import { CreateCategoryDto } from "../dtos/create_category.dto";
 import { Category } from "../models/category.model";
 import categoriesService from "../services/categories.service";
 import authController from "./auth.controller";
 
-class CategoriesController{
+class CategoriesController {
+
+    private categories = [
+        {
+            name: 'comidas de entrada'
+        },
+        {
+            name: 'aperitivos'
+        },
+        {
+            name: 'sopas'
+        },
+        {
+            name: 'ensaladas'
+        },
+        {
+            name: 'platos principales'
+        },
+        {
+            name: 'postres'
+        },
+        {
+            name: 'bebidas calientes'
+        },
+        {
+            name: 'bebidas al tiempo'
+        },
+        {
+            name: 'bebidas frias'
+        }
+    ];
 
     public getCategories = async (req: Request, res: Response) => {
 
@@ -106,7 +137,7 @@ class CategoriesController{
             
         }
 
-    }
+    };
 
     public deleteCategory = async (req: Request, res: Response) => {
 
@@ -141,9 +172,39 @@ class CategoriesController{
 
         }
 
-    }
+    };
+
+    // Insert categories in the DB
+    public insertCategories = async () => {
+
+        try {
+
+            const countCategories = await Category.findAndCountAll().then(info => info.count);
+
+            if (countCategories === 0) {
+
+                console.log(`\nInserted categories in database from Array.`);
+
+                this.categories.forEach(async (category) => {
+
+                    const formattingName = generalUtils.formattingWords(category.name);
+                    
+                    await Category.create({
+                        name: formattingName
+                    });
+
+                });
+
+            }
+            
+        } catch (error) {
+
+            (error instanceof Error) ? console.log(error.message) :  console.log(String(error));
+            
+        }
+
+    };
 
 }
-
 
 export default new CategoriesController();
