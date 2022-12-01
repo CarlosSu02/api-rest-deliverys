@@ -140,6 +140,11 @@ class DocumentationController {
                                 url: `http://localhost:${PORT}/api/products`,
                             },
                             {
+                                method: 'POST',
+                                url: `http://localhost:${PORT}/api/products/superadmin`,
+                                user: 'Only Superadmin'
+                            },
+                            {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/products/1`,
                             },
@@ -169,6 +174,25 @@ class DocumentationController {
                             {
                                 method: 'DELETE',
                                 url: `http://localhost:${PORT}/api/categories/1`,
+                            },
+                        ],
+                    },
+                    {
+                        section: 'recipes',
+                        description: 'List of available requests for the recipes.',
+                        access: 'All users.',
+                        routes: [
+                            {
+                                method: 'GET',
+                                url: `http://localhost:${PORT}/api/recipes`,
+                            },
+                            {
+                                method: 'POST',
+                                url: `http://localhost:${PORT}/api/recipes`,
+                            },
+                            {
+                                method: 'DELETE',
+                                url: `http://localhost:${PORT}/api/recipes/1`,
                             },
                         ],
                     },

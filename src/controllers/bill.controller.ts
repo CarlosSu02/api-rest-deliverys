@@ -79,7 +79,7 @@ class BillController {
 
         try {
 
-            if (authController.token.role !== 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to list the roles!'}));
+            if (authController.token.role !== 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to create bills!'}));
 
             const payload = req.body;
 
@@ -104,6 +104,24 @@ class BillController {
             const newBillDetail = await BillDetail.create({
                 ...createBillDetail
             });
+
+            let finallDiscount = 0;
+
+            if(newBillDetail.dataValues.totalPrice >= 1600){
+                finallDiscount = (newBillDetail.dataValues.totalPrice * 0.09);
+            }else if(newBillDetail.dataValues.totalPrice >= 1300){
+                finallDiscount = (newBillDetail.dataValues.totalPrice * 0.07);
+            }else if(newBillDetail.dataValues.totalPrice >= 1000){
+                finallDiscount = (newBillDetail.dataValues.totalPrice * 0.05);
+            }else if(newBillDetail.dataValues.totalPrice >= 700){
+                finallDiscount = (newBillDetail.dataValues.totalPrice * 0.03);
+            }
+
+            newBill.set({
+                tax: (newBillDetail.dataValues.totalPrice * 0.15),
+                discount: finallDiscount
+            });
+            await newBill.save();
 
             // actualizacion de stock de productos, abajo de newBills para confirmacion de la compra
             finalSale.products.forEach(async (product) => {
@@ -137,6 +155,7 @@ class BillController {
 
             if (error instanceof Error) {
                                 
+                console.log(error)
                 const info = JSON.parse(error.message);
                 return res.status(info.code).send(info);
             
