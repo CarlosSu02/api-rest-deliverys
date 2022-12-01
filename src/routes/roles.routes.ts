@@ -15,10 +15,10 @@ class RolesRoutes {
 
     initRoutes = () => {
 
-        this.router.get('/roles', authController.verifyToken, roleController.getRoles);
-        this.router.post('/roles', authController.verifyToken, roleController.createRole);
-        this.router.patch('/roles/:id', authController.verifyToken, roleController.updateRole);
-        this.router.delete('/roles/:id', authController.verifyToken, roleController.deleteRole);
+        this.router.get('/', authController.verifyToken, roleController.getRoles);
+        this.router.post('/', authController.verifyToken, roleController.createRole);
+        this.router.patch('/:id', authController.verifyToken, roleController.updateRole);
+        this.router.delete('/:id', authController.verifyToken, roleController.deleteRole);
 
     };
 

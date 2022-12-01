@@ -214,8 +214,7 @@ class AuthController {
                 ? req.rawHeaders.find(f => f.match(/(Bearer auth-token: )+?/))!.replace(/(Bearer auth-token: )+?/, '') 
                 : null);
                 
-            if(!accessToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied!' }));
-            if(!refreshToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied! Please sign in again.' }));
+            if(!accessToken || !refreshToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied! Please sign in again.' }));
 
             const validatedRefreshToken = authUtils.verifyTokenPayload(refreshToken, process.env.SECRET_KEY_REFRESH_TOKEN!);
             if (typeof validatedRefreshToken === 'string') throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' })); 

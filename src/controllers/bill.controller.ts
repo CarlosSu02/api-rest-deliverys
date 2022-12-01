@@ -6,6 +6,7 @@ import { CreateBillDto } from '../dtos/create_bill.dto';
 import { BillDetail, BillDetailAddModel } from '../models/bill.detail.model';
 import { Bill } from '../models/bill.model';
 import { ListProducts } from '../models/listProducts.model';
+import billDetailService from '../services/bill.detail.service';
 import billsService from '../services/bills.service';
 import productsService from '../services/products.service';
 import usersService from '../services/users.service';
@@ -92,13 +93,7 @@ class BillController {
 
             const newBill = await Bill.create({
                 ...validatedBill
-            });
-
-            const response: ResponseDto = {
-                code: 201,
-                message: 'New bill created successfully.',
-                results: newBill
-            }       
+            });      
 
             const createBillDetail: BillDetailAddModel = {
                 totalAmount: finalSale.finalAmount,
@@ -127,6 +122,14 @@ class BillController {
                 });
 
             });
+
+            const billDetail = await Bill.findOne({ where: { id: newBill.dataValues.id }, include: [{ model: BillDetail, attributes: ['totalPrice', 'totalAmount'] }] });
+
+            const response: ResponseDto = {
+                code: 201,
+                message: 'New bill created successfully.',
+                results: billDetail!
+            } 
 
             res.status(response.code!).send(response);
 

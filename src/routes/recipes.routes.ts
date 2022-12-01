@@ -15,9 +15,9 @@ class RecipesRoutes {
 
     initRoutes = () => {
 
-        this.router.get('/recipes', authController.verifyToken, recipesController.getRecipes);
-        this.router.post('/recipes', authController.verifyToken, recipesController.createRecipe);
-        this.router.delete('/recipes/:id', authController.verifyToken, recipesController.deleteRecipe)
+        this.router.get('/', authController.verifyToken, recipesController.getRecipes);
+        this.router.post('/', authController.verifyToken, recipesController.createRecipe);
+        this.router.delete('/:id', authController.verifyToken, recipesController.deleteRecipe)
 
     };
 

@@ -15,10 +15,10 @@ class IngredientsRoutes{
 
     initRoutes = () => {
 
-        this.router.get('/ingredients', authController.verifyToken, ingredientController.getIngredients);
-        this.router.post('/ingredients', authController.verifyToken, ingredientController.createIngredient);
-        this.router.patch('/ingredients/:id', authController.verifyToken, ingredientController.updateIngredient);
-        this.router.delete('/ingredients/:id', authController.verifyToken, ingredientController.deleteIngredient);
+        this.router.get('/', authController.verifyToken, ingredientController.getIngredients);
+        this.router.post('/', authController.verifyToken, ingredientController.createIngredient);
+        this.router.patch('/:id', authController.verifyToken, ingredientController.updateIngredient);
+        this.router.delete('/:id', authController.verifyToken, ingredientController.deleteIngredient);
 
     };
 

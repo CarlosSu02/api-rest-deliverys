@@ -1,5 +1,5 @@
 
-import { IsString, IsEmail, IsNotEmpty, IsNumber, Length, IsDate, IsBoolean } from "class-validator";
+import { IsString, IsEmail, IsNotEmpty, IsNumber, Length, IsDate, IsBoolean, IsOptional } from "class-validator";
 
 export class CreateBillDto {
   
@@ -8,11 +8,13 @@ export class CreateBillDto {
     public date!: string;
 
     @IsNumber()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public tax!: number;
 
     @IsNumber()
-    @IsNotEmpty()
+    // @IsNotEmpty()
+    @IsOptional()
     public discount!: number;
 
     @Length(3, 100)

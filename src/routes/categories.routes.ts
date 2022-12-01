@@ -15,10 +15,10 @@ class CategoriesRoutes {
 
     initRoutes = () => {
 
-        this.router.get('/categories', authController.verifyToken, categoriesController.getCategories);
-        this.router.post('/categories', authController.verifyToken, categoriesController.createCategory);
-        this.router.patch('/categories/:id', authController.verifyToken, categoriesController.updateCategory);
-        this.router.delete('/categories/:id', authController.verifyToken, categoriesController.deleteCategory)
+        this.router.get('/', authController.verifyToken, categoriesController.getCategories);
+        this.router.post('/', authController.verifyToken, categoriesController.createCategory);
+        this.router.patch('/:id', authController.verifyToken, categoriesController.updateCategory);
+        this.router.delete('/:id', authController.verifyToken, categoriesController.deleteCategory)
 
     };
 

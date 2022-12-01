@@ -80,15 +80,15 @@ class App {
     routes = () => {
 
         this.express.use('/api/documentation', documentationController.documentation);
-        this.express.use('/api', rolesRoutes.router);
+        this.express.use('/api/roles', rolesRoutes.router);
         this.express.use('/api/auth', authRoutes.router);
         this.express.use('/api/user', usersRoutes.router);
-        this.express.use('/api', billsRoutes.router);
-        this.express.use('/api', categoriesRoutes.router);
-        this.express.use('/api', ingredientsRoutes.router);
-        this.express.use('/api', productsRoutes.router);
-        this.express.use('/api', billsDetailRoutes.router);
-        this.express.use('/api', recipesRoutes.router);
+        this.express.use('/api/bills', billsRoutes.router);
+        this.express.use('/api/categories', categoriesRoutes.router);
+        this.express.use('/api/ingredients', ingredientsRoutes.router);
+        this.express.use('/api/products', productsRoutes.router);
+        this.express.use('/api/billdetails', billsDetailRoutes.router);
+        this.express.use('/api/recipes', recipesRoutes.router);
 
     };
 

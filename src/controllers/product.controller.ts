@@ -3,6 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { Request, Response } from 'express';
 import { ResponseDto } from '../common/dto/response.dto';
 import { CreateProductDto } from '../dtos/create_product.dto';
+import { CreateProductSuperadminDto } from '../dtos/create_product_superadmin.dto';
 import { Product } from '../models/product.model';
 import productsService from '../services/products.service';
 import usersService from '../services/users.service';
@@ -37,13 +38,59 @@ class ProductController{
 
         try {
 
-            if(authController.token.role === 'Buyer') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
+            if(authController.token.role !== 'Seller') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
             
             const createProductDto = plainToClass(CreateProductDto, req.body);
 
             createProductDto.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
             
             const validatedProduct = await productsService.validationAddProduct(createProductDto);
+
+            // validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
+
+            await productsService.searchProductBySeller(validatedProduct.name, validatedProduct.sellerId!);
+
+            const newProduct = await Product.create({
+                ...validatedProduct
+            });
+
+            const response: ResponseDto = {
+                code: 200,
+                message: 'The new product created successfully.',
+                results: newProduct
+            }
+
+            return res.status(response.code!).send(response);
+            
+        } catch (error) {
+            
+            if(error instanceof Error){
+
+                const info = JSON.parse(error.message);
+                
+                return res.status(info.code).send(info);
+
+            }
+
+            return res.status(500).send(String(error));
+
+        }
+
+    };
+
+    public createProductSuperadmin = async(req: Request, res: Response) => {
+
+        try {
+
+            if(authController.token.role !== 'Superadmin') throw new Error(JSON.stringify({ code: 401, message: 'You do not have permission to add products!' }))
+            
+            const createProductSuperAdminDto = plainToClass(CreateProductSuperadminDto, req.body);
+
+            const existsSeller = await usersService.searchUserByEmail(createProductSuperAdminDto.sellerEmail).then(u => u?.dataValues.id);
+            if (!existsSeller) throw new Error(JSON.stringify({ code: 404, message: 'Seller not exists!' }));            
+            createProductSuperAdminDto.sellerId = existsSeller;
+            
+            const validatedProduct = await productsService.validationAddProduct(createProductSuperAdminDto);
 
             // validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
 

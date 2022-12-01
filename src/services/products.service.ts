@@ -11,7 +11,7 @@ class ProductsService{
 
     public getProducts = async(): Promise<ResponseDto> => {
 
-        const searchAllProducts = await Product.findAndCountAll({ include: [{ model: Category, attributes: ['description'] }], order: [['id', 'ASC']] });;
+        const searchAllProducts = await Product.findAndCountAll({ include: [{ model: Category, attributes: ['name'] }], order: [['id', 'ASC']] });;
 
         if(searchAllProducts.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'There are not products added!' }))
 

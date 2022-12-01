@@ -15,10 +15,11 @@ class ProductsRoutes{
 
     initRoutes(){
 
-        this.router.get('/products', productController.getProducts);
-        this.router.post('/products', authController.verifyToken, productController.createProduct);
-        this.router.patch('/products/:id', authController.verifyToken, productController.updateProduct);
-        this.router.delete('/products/:id', authController.verifyToken, productController.deteleProduct);
+        this.router.get('/', productController.getProducts);
+        this.router.post('/', authController.verifyToken, productController.createProduct);
+        this.router.post('/superadmin', authController.verifyToken, productController.createProductSuperadmin);
+        this.router.patch('/:id', authController.verifyToken, productController.updateProduct);
+        this.router.delete('/:id', authController.verifyToken, productController.deteleProduct);
 
     };
 
