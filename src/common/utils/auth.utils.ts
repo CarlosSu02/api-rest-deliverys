@@ -3,8 +3,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import usersService from '../../services/users.service';
-
-// testing refreshjwt
 import { serialize } from "cookie";
 
 export interface IPayload {
@@ -40,17 +38,10 @@ class AuthUtils {
 
             const payload = jwt.verify(token, secretKey) as IPayload;
 
-            // console.log(payload);
-
-            // if (payload === undefined) console.log('');
-
             return payload;
             
         } catch (error) {
             
-            // console.log('?', error);
-
-            // Para que no muestre solo 'invalid signature' de esta forma se controla el error de verificacion.
             if (error instanceof Error) return error.message;
  
         }

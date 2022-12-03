@@ -2,10 +2,10 @@
 // User service
 import { UpdateInfoUserDto } from "../dtos/update_info_user.dto";
 import { User } from "../models/user.model";
-import authUtils from "../common/utils/auth.utils";
 import generalUtils from "../common/utils/general.utils";
 import rolesService from "./roles.service";
 import { ResponseDto } from "../common/dto/response.dto";
+import { Role } from "../models/role.model";
 
 class UserService {
 
@@ -31,7 +31,14 @@ class UserService {
         
         if (!(existsUser)) throw new Error(JSON.stringify({ error: 404, message: 'User not exists!' }));
 
-        return existsUser;
+        const role = await rolesService.getRoleByEmail(email);
+
+        const userData = {
+            ...existsUser.dataValues,
+            role
+        }
+
+        return userData;
 
     };
 
@@ -71,7 +78,7 @@ class UserService {
 
         if (!(await this.searchUserByEmail(email!))) throw new Error(JSON.stringify({ code: 404, message: 'User not exists!' }));
 
-        await rolesService.getRoleById(user.roleId!);
+        if (user.roleId !== undefined) await rolesService.getRoleById(user.roleId!);
 
         return user;
 

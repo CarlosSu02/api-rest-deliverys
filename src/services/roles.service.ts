@@ -27,7 +27,7 @@ class RolesServices {
 
         const role = await Role.findByPk(id);
 
-        if (role === null) throw new Error(JSON.stringify({ code: 404, message: 'Role is not exists!' }));
+        if (role === null) throw new Error(JSON.stringify({ code: 404, message: 'Role is not exists! The following roles exist...', results: (await Role.findAll({ order: [['id', 'ASC']] })).filter(role => role.dataValues.id !== 9999) }));
 
         return role;
 
@@ -46,8 +46,6 @@ class RolesServices {
         type = generalUtils.formattingWords(type);
 
         const role = await Role.findOne({ where: { type } });
-
-        // if (role !== null) throw new Error(JSON.stringify({ code: 400, message: 'Role already exists!' }));
 
         return role;
 

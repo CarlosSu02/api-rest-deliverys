@@ -1,6 +1,7 @@
 
 import { ResponseDto } from "../common/dto/response.dto";
 import generalUtils from "../common/utils/general.utils";
+import authController from "../controllers/auth.controller";
 import { CreateIngredientDto } from "../dtos/create_ingredient.dto";
 import { Ingredient } from "../models/ingredient.model";
 
@@ -13,10 +14,10 @@ class IngredientsService{
 
         if(searchAllIngredients.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'There are not ingredients added!'}))
 
-        if(role === 'comprador'){
+        if(role === 'Buyer'){
 
             messageToReturn = 'We have the following ingredients!';
-            ingredientsData = searchAllIngredients.rows.map( i => i.dataValues.description ); 
+            ingredientsData = searchAllIngredients.rows.map( i => i.dataValues.name ); 
             
         }else{
 
@@ -64,7 +65,7 @@ class IngredientsService{
 
         const ingredient = await Ingredient.findOne({ where: { id: id }});
 
-        if(ingredient === null) throw new Error(JSON.stringify({ code: 404, message: 'Ingredient is not exists!' }));
+        if(ingredient === null) throw new Error(JSON.stringify({ code: 404, message: 'Ingredient is not exists! The following ingredients exist...', results: (await this.getIngredients(authController.token.role)).results }));
 
         return ingredient;
 

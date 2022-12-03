@@ -32,8 +32,6 @@ class ProductsService{
 
         product.name = generalUtils.formattingWords(product.name);
 
-        // if ((await this.searchProductByName(product.name))) throw new Error(JSON.stringify({ code: 404, message: 'Product exists!' }));
-
         await categoriesService.searchCategoryById(product.categoryId);
 
         return product;
@@ -45,12 +43,7 @@ class ProductsService{
         name = generalUtils.formattingWords(name);
         store = generalUtils.formattingWords(store);
 
-        // const product = await Product.findOne({ where: { name }, include: [{ model: User, where: { name: store }, attributes: ['name', 'email', 'address'] }] }).then(data => data?.dataValues);
         const product = await Product.findOne({ where: { name }, include: [{ model: User, where: { name: store }, attributes: ['name', 'email', 'address']  }] }).then(info => info?.dataValues);
-
-        // console.log(product);
-
-        // if (product === undefined) throw new Error(JSON.stringify({ code: 404, message: `Product '${name}' is not exists in the store '${store}'.` }));
 
         return product;
 

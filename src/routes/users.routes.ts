@@ -3,7 +3,7 @@ import { Router } from "express";
 import authController from "../controllers/auth.controller";
 import userController from "../controllers/user.controller";
 
-class RolesRoutes {
+class UserRoutes {
 
     router = Router();
 
@@ -24,4 +24,4 @@ class RolesRoutes {
 
 }
 
-export default new RolesRoutes();
+export default new UserRoutes();

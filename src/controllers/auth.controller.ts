@@ -22,7 +22,7 @@ class AuthController {
 
         const response: ResponseDto = {
             code: 200,
-            message: 'Hello strange!'
+            message: 'Hello strange! 👋🏻'
         }
 
         res.status(response.code!).send(response)
@@ -43,13 +43,11 @@ class AuthController {
                 ...validatedUser
             });
 
-            // const searchUser = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
             const role = await rolesService.getRoleByEmail(validatedUser.email);
 
             // Token
-            // const token = jwt.sign({ email: validatedUser.email, role }, process.env.SECRET_KEY!, { expiresIn: '1day' });
-            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
-            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1min');
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
             
             const response: ResponseDto = {
                 code: 201,
@@ -83,7 +81,7 @@ class AuthController {
             
             const signinUserDto = plainToClass(SigninUserDto, payload);
             const validatedUser = await authService.validationSigninUser(signinUserDto);
-            // const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] }).then(info => info?.toJSON());
+
             const user = await userService.searchUserInclude(validatedUser.email, Role).then(info => info?.toJSON());
 
             const signinUser = {
@@ -99,11 +97,9 @@ class AuthController {
             };
 
             // Tokens
-            // const token = jwt.sign({ email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY!, { expiresIn: '1day'});
-            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
-            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1min');
+            const accessToken = authUtils.createTokenCookie('access_token', { email: validatedUser.email, role: user.role.type }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
+            const refreshToken = authUtils.createTokenCookie('refresh_token', { email: validatedUser.email }, process.env.SECRET_KEY_REFRESH_TOKEN!, '1day');
 
-            // .cookie('refresh-token', serialized)
             res.status(response.code!).cookie('access_token', accessToken.cookie).cookie('refresh_token', refreshToken.cookie).header('Cache-Control', `auth-token: ${accessToken.token}`).send(response);
 
         } catch (error) {
@@ -159,7 +155,7 @@ class AuthController {
             
             const changePasswordDto = plainToClass(ChangePasswordDto, payload);
             const validatedUser = await authService.changePassword(changePasswordDto);
-            // const user = await User.findOne({ where: { email: validatedUser.email }, include: [{ model: Role }] });
+
             const user = await userService.searchUserInclude(validatedUser.email, Role);
             
             user?.set({
@@ -216,7 +212,7 @@ class AuthController {
                 ? req.rawHeaders.find(f => f.match(/(Bearer auth-token: )+?/))!.replace(/(Bearer auth-token: )+?/, '') 
                 : null);
                 
-            if(!accessToken || !refreshToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied! Please sign in again.' }));
+            if (!accessToken || !refreshToken) throw new Error(JSON.stringify({ code: 401, message: 'Access denied! Please sign in again.' }));
 
             const validatedRefreshToken = authUtils.verifyTokenPayload(refreshToken, process.env.SECRET_KEY_REFRESH_TOKEN!);
             if (typeof validatedRefreshToken === 'string') throw new Error(JSON.stringify({ code: 400, message: 'Token invalid! Please sign in again.' })); 
@@ -230,11 +226,9 @@ class AuthController {
                     const decode = jwt.decode(accessToken, { complete: true });
                     const payload = decode?.payload as IPayload;
                     
-                    const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '20000');
+                    const newAccessToken = authUtils.createTokenCookie('access_token', { email: payload.email, role: payload.role }, process.env.SECRET_KEY_ACCESS_TOKEN!, '1min');
 
                     validatedAccessToken = authUtils.verifyTokenPayload(newAccessToken.token, process.env.SECRET_KEY_ACCESS_TOKEN!) as IPayload;
-
-                    console.log('\nNew access_token:', newAccessToken.token);
 
                     res.cookie('access_token', newAccessToken.cookie);
 

@@ -138,8 +138,6 @@ class UserController {
         } catch (error) {
 
             if (error instanceof Error) {
-
-                console.log(error);
                 
                 const info = JSON.parse(error.message);
                 return res.status(info.code).send(info);

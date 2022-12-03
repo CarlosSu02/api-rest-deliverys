@@ -89,8 +89,6 @@ class BillsServices {
 
     public validationAddBill = async (bill: CreateBillDto): Promise<CreateBillDto> => {
 
-        // role.type = (role.type).toLowerCase().trim();
-
         const errors = await generalUtils.errorsFromValidate(bill);
 
         if (errors !== undefined) throw new Error(JSON.stringify(errors));
@@ -109,18 +107,9 @@ class BillsServices {
             products: []
         };
 
-        // let partialPrice = 0;
-
-        // const products1 = products.products;
-
         for (const product of products.products) {
 
             const existsProduct = await productsService.searchProductByNameAndStore(product.product, product.store);
-
-            // if (existsProduct === undefined)
-            //     notExistsProducts.push(product);
-            // else
-            //     existsProducts.push(product);
 
             if (existsProduct === undefined) throw new Error(JSON.stringify({ code: 404, message: `The product '${product.product}' is not exists in the store '${product.store}'.` }));
             
@@ -128,18 +117,14 @@ class BillsServices {
             
             if (existsProduct.stock < product.amount) throw new Error(JSON.stringify({code: 400, message: `'${product.store}' store does not have ${product.amount} the units you request, select a quantity less than or equal to ${existsProduct.stock} units.`}));
             
-            // partialPrice += product.amount * existsProduct.price;
             product.id = existsProduct.id;
 
-            // compra final
             finalSale.finalPrice += product.amount * existsProduct.price;
             if (product.amount !== 0 && product.amount > 0) finalSale.products.push(product);
 
             finalSale.finalAmount += product.amount;
 
         }
-
-        // console.log(finalSale);
 
         return finalSale;
 
@@ -148,20 +133,3 @@ class BillsServices {
 }
 
 export default new BillsServices();
-
-/* 
-const payload = req.body;
-
-for (let i = 0; i < payload.products.length; i++) {
-    const product = await productsService.getProductByDescriptionBillDetail(payload.products[i].product);
-    console.log(product.dataValues.stock)
-
-    //console.log(product)
-    if(product.dataValues.size !== payload.products[i].tienda)throw new Error(JSON.stringify({code: 400, message: `The product ${product.dataValues.description} does not belong to ${payload.products[i].tienda} store`}))
-    if(product.dataValues.stock <= payload.products[i].amount)throw new Error(JSON.stringify({code: 400, message: ` ${payload.products[i].tienda} store does not have ${product.dataValues.size} the units you request, select a quantity less than ${product.dataValues.stock+1} units`}))
-
-    product.dataValues.stock-=payload.products[i].amount;
-    
-    console.log(product.dataValues.stock)
-}
-*/

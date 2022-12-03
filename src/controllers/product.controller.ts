@@ -46,8 +46,6 @@ class ProductController{
             
             const validatedProduct = await productsService.validationAddProduct(createProductDto);
 
-            // validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
-
             await productsService.searchProductBySeller(validatedProduct.name, validatedProduct.sellerId!);
 
             const newProduct = await Product.create({
@@ -90,8 +88,6 @@ class ProductController{
             createProductSuperAdminDto.sellerId = existsSeller;
             
             const validatedProduct = await productsService.validationAddProduct(createProductSuperAdminDto);
-
-            // validatedProduct.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
 
             await productsService.searchProductBySeller(validatedProduct.name, validatedProduct.sellerId!);
 
