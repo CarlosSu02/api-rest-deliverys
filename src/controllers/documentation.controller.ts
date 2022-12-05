@@ -27,10 +27,20 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/roles`,
+                                example_body: [
+                                    {
+                                        "type": "example"
+                                    }
+                                ]
                             },
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/roles/1`,
+                                example_body: [ 
+                                    {
+                                        "type": "example"
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
@@ -46,14 +56,37 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/auth/signup`,
+                                example_body: [
+                                    {
+                                        "name": "example",
+                                        "phone": 12345678,
+                                        "address": "example",
+                                        "email": "example@gmail.com",
+                                        "password": "example",
+                                        "roleId": 1
+                                    }
+                                ]
                             },
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/auth/signin`,
+                                example_body: [
+                                    {
+                                        "email": "example@gmail.com",
+                                        "password": "example",
+                                    }
+                                ]
                             },
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/auth/change_password`,
+                                example_body: [
+                                    {
+                                        "email": "example@gmail.com",
+                                        "password": "example",
+                                        "new_password": "exampleNewPassword"
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
@@ -69,6 +102,7 @@ class DocumentationController {
                             {
                                 method: 'GET',
                                 url: `http://localhost:${PORT}/api/user/users`,
+                                user: 'Only Superadmin',
                             },
                             {
                                 method: 'GET',
@@ -77,10 +111,25 @@ class DocumentationController {
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/user/update`,
+                                note: 'May be less data.',
+                                example_body: [
+                                    {
+                                        "name": "example update",
+                                        "phone": 87654321,
+                                        "address": "example update",
+                                        "roleId": 9999
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
                                 url: `http://localhost:${PORT}/api/user/delete`,
+                                example_body: [
+                                    {
+                                        "email": "example@gmail.com",
+                                        "password": "example"
+                                    }
+                                ]
                             },
                         ],
                     },
@@ -100,6 +149,28 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/bills`,
+                                example_body: [
+                                    {
+                                        "paymentForm": "credit card, bank transfer or paypal",
+                                        "products": [
+                                          {
+                                                "product": "example product 1",
+                                                "amount": 1,
+                                                "store": "example store 1"
+                                            },
+                                            {
+                                                "product": "example product 2",
+                                                "amount": 1,
+                                                "store": "example store 2"                                            
+                                            },
+                                            {
+                                                "product": "example product 3",
+                                                "amount": 1,
+                                                "store": "example store 3"
+                                            }
+                                        ]
+                                    }
+                                ]
                             },
                         ],
                     },
@@ -115,10 +186,28 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/ingredients`,
+                                example_body: [
+                                    {
+                                        "name": "coffee",
+                                        "amount": 1223,
+                                        "unit_measure": 3442,
+                                        "cost": 223,
+                                        "stock": 345
+                                    }
+                                ]
                             },
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/ingredients/1`,
+                                example_body: [
+                                    {
+                                        "name": "exported coffee",
+                                        "amount": 1223,
+                                        "unit_measure": 3442,
+                                        "cost": 223,
+                                        "stock": 345
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
@@ -138,15 +227,53 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/products`,
+                                example_body: [
+                                    {
+                                        "name": "example",
+                                        "description": "example description",
+                                        "price": 30,
+                                        "priceNotTax": 28,
+                                        "isElaborate": false,
+                                        "stock": 50,
+                                        "size": "8 onz",
+                                        "categoryId": 2
+                                    }
+                                ]
                             },
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/products/superadmin`,
-                                user: 'Only Superadmin'
+                                user: 'Only Superadmin',
+                                example_body: [
+                                    {
+                                        "name": "example",
+                                        "description": "example description",
+                                        "price": 100,
+                                        "priceNotTax": 28,
+                                        "isElaborate": true,
+                                        "stock": 50,
+                                        "size": "8 onz",
+                                        "categoryId": 3,
+                                        "sellerEmail": "exampleseller@gmail.com"
+                                    }
+                                ]
                             },
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/products/1`,
+                                example_body: [
+                                    {
+                                        "name": "edit example",
+                                        "description": "edit example description",
+                                        "price": 30,
+                                        "priceNotTax": 28,
+                                        "totalPrice": 30,
+                                        "isElaborate": false,
+                                        "stock": 50,
+                                        "size": "8 onz",
+                                        "categoryId": 3
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
@@ -166,10 +293,20 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/categories`,
+                                example_body: [
+                                    {
+                                        "name": "example category"
+                                    }
+                                ]
                             },
                             {
                                 method: 'PATCH',
                                 url: `http://localhost:${PORT}/api/categories/1`,
+                                example_body: [
+                                    {
+                                        "name": "edit category seller"
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',
@@ -180,7 +317,7 @@ class DocumentationController {
                     {
                         section: 'recipes',
                         description: 'List of available requests for the recipes.',
-                        access: 'All users.',
+                        access: 'Superadmin [CRD], Seller [CRD] and others users [R].',
                         routes: [
                             {
                                 method: 'GET',
@@ -189,6 +326,12 @@ class DocumentationController {
                             {
                                 method: 'POST',
                                 url: `http://localhost:${PORT}/api/recipes`,
+                                example_body: [
+                                    {
+                                        "ingredientId": 4,
+                                        "productId": 5
+                                    }
+                                ]
                             },
                             {
                                 method: 'DELETE',

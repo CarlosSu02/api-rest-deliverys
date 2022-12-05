@@ -129,6 +129,9 @@ class ProductController{
             const product = await productsService.searchProductById(+id);
 
             const updateProductDto = plainToClass(CreateProductDto, req.body);
+
+            updateProductDto.sellerId = await usersService.searchUserByEmail(authController.token.email).then(u => u?.dataValues.id);
+
             const validatedProduct = await productsService.validationAddProduct(updateProductDto);
 
             product.set({...validatedProduct});
