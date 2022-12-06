@@ -10,7 +10,7 @@ import { User } from "../models/user.model";
 import ingredientsService from "./ingredients.service";
 import productsService from "./products.service";
 
-interface Recipe {
+interface IRecipe {
     seller: string,
     product: string,
     ingredients: string[]
@@ -26,7 +26,7 @@ class RecipesServices {
 
         const recipes = searchAllRecipes.map(data => {
 
-            let recipe: Recipe = {
+            let recipe: IRecipe = {
                 seller: data.dataValues.user.name,
                 product:  data.dataValues.name,
                 ingredients: []

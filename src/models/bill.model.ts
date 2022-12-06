@@ -40,11 +40,11 @@ export const Bill = connection.connection.define(
             allowNull: false
         },
         tax: {
-            type: Sequelize.DataType.INTEGER,
+            type: Sequelize.DataType.DECIMAL,
             allowNull: true
         },
         discount: {
-            type: Sequelize.DataType.INTEGER,
+            type: Sequelize.DataType.DECIMAL,
             allowNull: true
         },
         paymentForm: {

@@ -107,15 +107,17 @@ class BillsServices {
             products: []
         };
 
+        const searchAllStoresProducts = await productsService.searchAllStoresAndProducts();
+
         for (const product of products.products) {
 
             const existsProduct = await productsService.searchProductByNameAndStore(product.product, product.store);
 
-            if (existsProduct === undefined) throw new Error(JSON.stringify({ code: 404, message: `The product '${product.product}' is not exists in the store '${product.store}'.` }));
+            if (existsProduct === undefined) throw new Error(JSON.stringify({ code: 404, message: `The product '${product.product}' is not exists in the store '${product.store}'. The following products are available...`, results: searchAllStoresProducts }));
             
             if (existsProduct.stock === 0) throw new Error(JSON.stringify({ code: 400, message: `Sorry, there are no units available of the product '${product.product}' from the store '${product.store}'.` }));
             
-            if (existsProduct.stock < product.amount) throw new Error(JSON.stringify({code: 400, message: `'${product.store}' store does not have ${product.amount} the units you request, select a quantity less than or equal to ${existsProduct.stock} units.`}));
+            if (existsProduct.stock < product.amount) throw new Error(JSON.stringify({code: 400, message: `'${product.store}' store does not have ${product.amount} the units you request, select a quantity less than or equal to ${existsProduct.stock} units.` }));
             
             product.id = existsProduct.id;
 

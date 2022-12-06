@@ -7,6 +7,11 @@ import { Product } from "../models/product.model";
 import { User } from "../models/user.model";
 import categoriesService from "./categories.service";
 
+interface IProducts {
+    store: string,
+    products: any[]
+}
+
 class ProductsService{
 
     public getProducts = async(): Promise<ResponseDto> => {
@@ -66,6 +71,36 @@ class ProductsService{
         if(product !== null) throw new Error(JSON.stringify({ code: 400, message: 'Product already exists!' }));
 
         return product;
+
+    };
+
+    public searchAllStoresAndProducts = async () => {
+
+        const products = await User.findAndCountAll({ attributes: ['name'], include: [{ model: Product, attributes: ['name', 'price', 'stock'] }] });
+
+        if (products.count === 0) await this.getProducts();
+
+        const storeProducts = products.rows.map(store => {
+
+            if (store.dataValues.products.length !== 0) {
+
+                let product: IProducts = {
+                    store: store.dataValues.name,
+                    products: []
+                }
+
+                store.dataValues.products.map((prod: any) => {
+
+                   product.products.push(prod.dataValues);
+                    
+                });
+
+                return product;
+            }
+
+        });
+
+        return storeProducts.filter(data => data !== undefined);
 
     };
 
