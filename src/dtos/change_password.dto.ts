@@ -18,5 +18,9 @@ export class ChangePasswordDto {
     @IsNotEmpty()
     public new_password!: string;
 
-} 
+    @Length(3, 100)
+    @IsString()
+    @IsNotEmpty()
+    public confirm_new_password!: string;
 
+} 

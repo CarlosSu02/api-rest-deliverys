@@ -22,7 +22,7 @@
 ## Instrucciones:
 1. Clonar el repositorio.
 2. Instalar las dependencias con `npm install`.
-3. Copiar el archivo `.env.example` y renombrarlo a `.env` y configurar las variables de entorno.
+3. Copiar el archivo `.env-template` y renombrarlo a `.env` y configurar las variables de entorno.
 4. Ejecutar el comando `npm run dev` para iniciar la aplicación.
 5. En el navegador puede ingresar a la ruta ``http://localhost:PORT/api/documentation`` y verá todas las rutas disponibles para consumir la api y otros datos adicionales de las mismas como ser la sección a la que pertenece, descripción, método y la URL. En caso de no querer crear las rutas para las peticiones puede instalar [Insmonia](https://insomnia.rest/download) y seguir las instrucciones del repositorio: [api-rest-deliverys-insomnia](https://github.com/CarlosSu02/api-rest-deliverys-insomnia).
 
@@ -109,6 +109,7 @@ En caso de no correr la aplicación las rutas disponibles son las siguientes:
             "address": "example",
             "email": "example@gmail.com",
             "password": "example",
+            "confirm_password": "example",
             "roleId": 1
 	    }    
       ```
@@ -130,7 +131,8 @@ En caso de no correr la aplicación las rutas disponibles son las siguientes:
 	    {
             "email": "example@gmail.com",
 		    "password": "example",
-	        "new_password": "exampleNewPassword"
+	        "new_password": "exampleNewPassword",
+            "confirm_new_password": "exampleNewPassword"
 	    }   
       ```  
 

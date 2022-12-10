@@ -63,6 +63,7 @@ class DocumentationController {
                                         "address": "example",
                                         "email": "example@gmail.com",
                                         "password": "example",
+                                        "confirm_password": "example",
                                         "roleId": 1
                                     }
                                 ]
@@ -84,7 +85,8 @@ class DocumentationController {
                                     {
                                         "email": "example@gmail.com",
                                         "password": "example",
-                                        "new_password": "exampleNewPassword"
+                                        "new_password": "exampleNewPassword",
+                                        "confirm_new_password": "exampleNewPassword"
                                     }
                                 ]
                             },
@@ -136,7 +138,7 @@ class DocumentationController {
                     {
                         section: 'bills',
                         description: 'List of available requests for the bills.',
-                        access: 'Buyer [RP] and Seller [R].',
+                        access: 'Buyer [CR] and Seller [R].',
                         routes: [
                             {
                                 method: 'GET',

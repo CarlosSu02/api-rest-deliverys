@@ -68,11 +68,25 @@ class BillsServices {
         
         if (bills.count === 0) throw new Error(JSON.stringify({ code: 500, message: 'Has not made any sale!' }));
 
+        let countSalesByProducts: number = 0;
+
+        const onlyBills = bills.rows.map(product => {
+           
+            if (product.dataValues.listProducts.length !== 0) {
+            
+                countSalesByProducts += product.dataValues.listProducts.length;
+            
+                return product;
+            
+            }
+
+        }).filter(data =>  data !== undefined);
+
         return {
             code: 200,
-            message: 'These are your sales.',
-            count: bills.count,
-            results: bills.rows
+            message: 'These are your sales by product, the counter will show the sum of each field in \'listProducts\'.',
+            count: countSalesByProducts,
+            results: onlyBills
         };
 
     };
